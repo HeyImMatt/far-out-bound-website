@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Far Out Bound</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black:   #030410;
+            --frame:   #0A0D24;
+            --framehi: #16194A;
+            --teal:    #00E5C8;
+            --magenta: #E8195A;
+            --gold:    #F5A820;
+            --violet:  #5B2FE8;
+            --text:    #C8C4DC;
+            --mute:    #363258;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--black);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 100;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text);
+            cursor: none;
+        }
+
+        /* ── Cursor ─────────────────────────────────────────────── */
+        #cur {
+            position: fixed; z-index: 9999;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--teal);
+            box-shadow: 0 0 8px var(--teal), 0 0 18px rgba(0,229,200,0.5);
+            pointer-events: none;
+            transform: translate(-50%,-50%);
+        }
+        #cur-ring {
+            position: fixed; z-index: 9998;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,229,200,0.35);
+            pointer-events: none;
+            transform: translate(-50%,-50%);
+        }
+
+        /* ── Canvas starfield ────────────────────────────────────── */
+        #starfield {
+            position: fixed; inset: 0;
+            z-index: 0;
+        }
+
+        /* ── Nebula layers ───────────────────────────────────────── */
+        .neb {
+            position: fixed; inset: 0;
+            z-index: 1; pointer-events: none;
+        }
+        .neb-a {
+            background:
+                radial-gradient(ellipse 55% 38% at 10% 22%, rgba(91,47,232,0.24) 0%, transparent 70%),
+                radial-gradient(ellipse 38% 52% at 90% 78%, rgba(232,25,90,0.15) 0%, transparent 70%),
+                radial-gradient(ellipse 45% 30% at 65% 6%,  rgba(0,229,200,0.10) 0%, transparent 65%);
+            animation: nebA 26s ease-in-out infinite alternate;
+        }
+        .neb-b {
+            background:
+                radial-gradient(ellipse 44% 60% at 80% 15%, rgba(30,78,240,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 34% 44% at 16% 84%, rgba(245,168,32,0.09) 0%, transparent 68%),
+                radial-gradient(ellipse 50% 34% at 42% 96%, rgba(91,47,232,0.11) 0%, transparent 70%);
+            animation: nebB 36s ease-in-out infinite alternate;
+        }
+        @keyframes nebA {
+            from { transform: translate(0,0) scale(1);    }
+            to   { transform: translate(-3%,4%) scale(1.08); }
+        }
+        @keyframes nebB {
+            from { transform: translate(0,0) scale(1.05); }
+            to   { transform: translate(4%,-3%) scale(0.95); }
+        }
+
+        /* ── Film grain ──────────────────────────────────────────── */
+        .grain {
+            position: fixed; inset: -50%;
+            z-index: 2; pointer-events: none; opacity: 0.042;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: grainShift 0.4s steps(1) infinite;
+        }
+        @keyframes grainShift {
+            0%  { transform: translate(0,0); }
+            25% { transform: translate(-4%,-6%); }
+            50% { transform: translate(6%, 3%); }
+            75% { transform: translate(-2%, 7%); }
+        }
+
+        /* ── Floating particles ──────────────────────────────────── */
+        .particles { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
+        .p {
+            position: absolute; border-radius: 50%;
+            animation: pDrift linear infinite;
+        }
+        @keyframes pDrift {
+            from { transform: translateY(108vh) translateX(var(--dx)); opacity: 0; }
+            8%   { opacity: var(--op); }
+            92%  { opacity: var(--op); }
+            to   { transform: translateY(-8vh) translateX(calc(var(--dx) + var(--ex))); opacity: 0; }
+        }
+
+        /* ── Compass nav ─────────────────────────────────────────── */
+        .compass-nav {
+            position: fixed; top: 26px; right: 26px;
+            z-index: 200;
+        }
+        .compass-btn {
+            background: none; border: none;
+            cursor: none; padding: 10px;
+            display: block; position: relative;
+        }
+        .compass-btn::after {
+            content: ''; position: absolute; inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,229,200,0.08) 0%, transparent 72%);
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .compass-btn:hover::after { opacity: 1; }
+        .compass-svg {
+            display: block; width: 62px; height: 62px;
+            filter: drop-shadow(0 0 5px rgba(0,229,200,0.4));
+            transition: filter 0.3s;
+        }
+        .compass-btn:hover .compass-svg {
+            filter: drop-shadow(0 0 12px rgba(0,229,200,0.85));
+        }
+
+        /* ── Scene ───────────────────────────────────────────────── */
+        .scene {
+            position: fixed; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10;
+        }
+
+        /* ── Porthole wrap (parallax target) ─────────────────────── */
+        .porthole-wrap {
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            will-change: transform;
+            transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* ── Sonar pulses ────────────────────────────────────────── */
+        .sonar {
+            position: absolute; border-radius: 50%;
+            border: 1px solid rgba(0,229,200,0.55);
+            pointer-events: none;
+            animation: sonarPulse 5.4s ease-out infinite;
+        }
+        .sonar:nth-child(2) { animation-delay: 1.8s; }
+        .sonar:nth-child(3) { animation-delay: 3.6s; }
+        @keyframes sonarPulse {
+            0%   { width: 65vmin; height: 65vmin; opacity: 0.45; border-color: rgba(0,229,200,0.55); }
+            100% { width: 135vmin; height: 135vmin; opacity: 0;   border-color: rgba(0,229,200,0); }
+        }
+
+        /* ── Porthole container ──────────────────────────────────── */
+        .porthole {
+            width: 63vmin; height: 63vmin;
+            border-radius: 50%;
+            position: relative;
+            animation: portholeAura 9s ease-in-out infinite;
+        }
+        @keyframes portholeAura {
+            0%, 100% { box-shadow: 0 0 50px rgba(0,229,200,0.10), 0 0 100px rgba(0,229,200,0.04); }
+            50%       { box-shadow: 0 0 70px rgba(0,229,200,0.20), 0 0 140px rgba(0,229,200,0.08); }
+        }
+
+        /* ── Frame (outer metallic ring) ─────────────────────────── */
+        .porthole-frame {
+            position: absolute; inset: 0;
+            border-radius: 50%; z-index: 1;
+            background: conic-gradient(
+                from 10deg,
+                #080B22 0deg, #161B44 38deg,
+                #0C0F2A 78deg, #1E2450 118deg,
+                #090C22 158deg, #181D48 198deg,
+                #0C0F2A 238deg, #1E2450 278deg,
+                #080B22 318deg, #161B44 358deg,
+                #080B22 360deg
+            );
+            box-shadow:
+                0 0 0 1.5px #060813,
+                0 6px 32px rgba(0,0,0,0.85),
+                0 0 0 3px rgba(255,255,255,0.025),
+                inset 0 3px 10px rgba(0,0,0,0.95),
+                inset 0 -1px 4px rgba(255,255,255,0.03);
+        }
+
+        /* ── Rim (inner ring with depth) ─────────────────────────── */
+        .porthole-rim {
+            position: absolute; inset: 17px;
+            border-radius: 50%; z-index: 2;
+            background: linear-gradient(148deg, #141838 0%, #0A0C1E 55%, #13183A 100%);
+            box-shadow:
+                0 0 0 1px #06070F,
+                inset 0 4px 14px rgba(0,0,0,0.97),
+                inset 0 -1px 4px rgba(255,255,255,0.025),
+                inset 0 0 0 1px rgba(255,255,255,0.03);
+        }
+
+        /* ── Glass ───────────────────────────────────────────────── */
+        .porthole-glass {
+            position: absolute; inset: 30px;
+            border-radius: 50%; z-index: 3;
+            background:
+                radial-gradient(circle at 28% 22%, rgba(0,229,200,0.04) 0%, transparent 52%),
+                radial-gradient(circle at 72% 76%, rgba(91,47,232,0.05) 0%, transparent 55%),
+                rgba(3, 4, 18, 0.84);
+            border-top:    1.5px solid rgba(255,255,255,0.08);
+            border-right:  1.5px solid rgba(255,255,255,0.04);
+            border-bottom: 1.5px solid rgba(0,0,0,0.4);
+            border-left:   1.5px solid rgba(255,255,255,0.04);
+            box-shadow:
+                inset 0 0 50px rgba(0,0,0,0.55),
+                inset 0 0 0 1px rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+
+        /* lens highlight */
+        .porthole-glass::before {
+            content: '';
+            position: absolute;
+            top: 5%; left: 11%;
+            width: 44%; height: 26%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.055) 0%, transparent 75%);
+            border-radius: 50%;
+            transform: rotate(-40deg);
+            pointer-events: none;
+        }
+
+        /* scan lines */
+        .porthole-glass::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px, transparent 2px,
+                rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+            );
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        /* ── Porthole content ────────────────────────────────────── */
+        .porthole-content {
+            position: relative; z-index: 4;
+            text-align: center;
+            padding: 2vmin;
+        }
+
+        .brand {
+            display: block;
+            font-weight: 100;
+            font-size: clamp(1.1rem, 3.4vmin, 2.2rem);
+            letter-spacing: 0.18em;
+            margin-right: -0.18em;
+            color: var(--text);
+            text-shadow:
+                0 0 24px rgba(0,229,200,0.28),
+                0 0 70px rgba(0,229,200,0.10);
+            animation: fadeDrift 2.2s ease-out 0.3s both, brandBreath 7s ease-in-out 2.5s infinite;
+        }
+        @keyframes brandBreath {
+            0%, 100% { text-shadow: 0 0 24px rgba(0,229,200,0.28), 0 0 70px rgba(0,229,200,0.10); }
+            50%       { text-shadow: 0 0 36px rgba(0,229,200,0.50), 0 0 90px rgba(0,229,200,0.20); }
+        }
+
+        .rule {
+            width: 48px; height: 1px;
+            margin: 2.2vmin auto;
+            background: linear-gradient(to right, transparent, rgba(0,229,200,0.5), transparent);
+            animation: fadeDrift 2.2s ease-out 0.7s both;
+        }
+
+        .tagline {
+            display: block;
+            font-weight: 100;
+            font-size: clamp(0.44rem, 1.1vmin, 0.68rem);
+            letter-spacing: 0.40em;
+            margin-right: -0.40em;
+            color: rgba(0,229,200,0.60);
+            animation: fadeDrift 2.2s ease-out 1.1s both;
+        }
+
+        @keyframes fadeDrift {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        .footer {
+            position: fixed; bottom: 26px;
+            left: 50%; transform: translateX(-50%);
+            z-index: 100;
+            display: flex; align-items: center; gap: 10px;
+            animation: fadeDrift 2.2s ease-out 2.2s both;
+        }
+        .sig-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--teal);
+            box-shadow: 0 0 6px var(--teal);
+            animation: sigBlink 2.8s ease-in-out infinite;
+        }
+        .sig-dot:last-child { animation-delay: 0.9s; }
+        @keyframes sigBlink {
+            0%, 100% { opacity: 0.18; }
+            50%       { opacity: 1; }
+        }
+        .sig-text {
+            font-size: 0.46rem;
+            letter-spacing: 0.44em;
+            margin-right: -0.44em;
+            color: rgba(200,196,220,0.28);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+    <div class="neb neb-a"></div>
+    <div class="neb neb-b"></div>
+    <div class="grain"></div>
+    <div class="particles" id="particles"></div>
+
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
+
+    <!-- Compass navigation -->
+    <nav class="compass-nav">
+        <button class="compass-btn" id="compassBtn" aria-label="Navigation">
+            <svg class="compass-svg" id="compassSvg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="47" stroke="rgba(0,229,200,0.18)" stroke-width="0.6"/>
+                <circle cx="50" cy="50" r="36" stroke="rgba(0,229,200,0.10)" stroke-width="0.5"/>
+
+                <!-- Cardinal N — bright -->
+                <path d="M50 4 L47.0 30 L50 25 L53.0 30 Z" fill="#00E5C8"/>
+                <!-- Cardinal S -->
+                <path d="M50 4 L47.0 30 L50 25 L53.0 30 Z" fill="rgba(0,229,200,0.36)" transform="rotate(180,50,50)"/>
+                <!-- Cardinal E -->
+                <path d="M50 4 L47.0 30 L50 25 L53.0 30 Z" fill="rgba(0,229,200,0.36)" transform="rotate(90,50,50)"/>
+                <!-- Cardinal W -->
+                <path d="M50 4 L47.0 30 L50 25 L53.0 30 Z" fill="rgba(0,229,200,0.36)" transform="rotate(270,50,50)"/>
+
+                <!-- Intercardinal (smaller) -->
+                <path d="M50 13 L48.8 30 L50 27.5 L51.2 30 Z" fill="rgba(0,229,200,0.18)" transform="rotate(45,50,50)"/>
+                <path d="M50 13 L48.8 30 L50 27.5 L51.2 30 Z" fill="rgba(0,229,200,0.18)" transform="rotate(135,50,50)"/>
+                <path d="M50 13 L48.8 30 L50 27.5 L51.2 30 Z" fill="rgba(0,229,200,0.18)" transform="rotate(225,50,50)"/>
+                <path d="M50 13 L48.8 30 L50 27.5 L51.2 30 Z" fill="rgba(0,229,200,0.18)" transform="rotate(315,50,50)"/>
+
+                <!-- Degree ticks at 30° intervals (skipping cardinal/intercardinal) -->
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(30,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(60,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(120,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(150,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(210,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(240,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(300,50,50)"/>
+                <line x1="50" y1="2" x2="50" y2="7" stroke="rgba(0,229,200,0.15)" stroke-width="0.8" transform="rotate(330,50,50)"/>
+
+                <!-- Center hub -->
+                <circle cx="50" cy="50" r="5" fill="#030410" stroke="rgba(0,229,200,0.42)" stroke-width="1"/>
+                <circle cx="50" cy="50" r="2" fill="rgba(0,229,200,0.9)"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Main scene -->
+    <main class="scene">
+        <div class="porthole-wrap" id="pWrap">
+            <div class="sonar"></div>
+            <div class="sonar"></div>
+            <div class="sonar"></div>
+
+            <div class="porthole" id="porthole">
+                <div class="porthole-frame"></div>
+                <!-- bolts injected by JS -->
+                <div class="porthole-rim"></div>
+                <div class="porthole-glass">
+                    <div class="porthole-content">
+                        <span class="brand">Far Out Bound</span>
+                        <div class="rule"></div>
+                        <span class="tagline">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="sig-dot"></div>
+        <span class="sig-text">Signal incoming</span>
+        <div class="sig-dot"></div>
+    </footer>
+
+<script>
+// ── Starfield ────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('starfield');
+const ctx    = canvas.getContext('2d');
+let W, H, stars = [];
+
+const STAR_COLS = [
+    [255,255,255], [200,225,255], [255,245,205],
+    [180,215,255], [200,255,242],
+];
+
+function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+
+function mkStar() {
+    const c = STAR_COLS[Math.floor(Math.random() * STAR_COLS.length)];
+    return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.35 + 0.18,
+        base: Math.random() * 0.52 + 0.14,
+        op: 0,
+        col: c,
+        ts: Math.random() * 0.00095 + 0.00035, // ~7-18 sec twinkle period
+        to: Math.random() * Math.PI * 2,
+        dx: (Math.random() - 0.5) * 0.022,
+        dy: (Math.random() - 0.5) * 0.010,
+    };
+}
+
+function initStars() {
+    stars = [];
+    const n = Math.floor(W * H / 2600);
+    for (let i = 0; i < n; i++) { const s = mkStar(); s.op = s.base; stars.push(s); }
+}
+
+function drawStars(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) {
+        s.x = (s.x + s.dx + W) % W;
+        s.y = (s.y + s.dy + H) % H;
+        s.op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.ts + s.to) * 0.17));
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.op})`;
+        ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+}
+
+window.addEventListener('resize', () => { resize(); initStars(); placeBolts(); });
+resize(); initStars();
+requestAnimationFrame(drawStars);
+
+// ── Porthole bolts ───────────────────────────────────────────────────────────
+function placeBolts() {
+    const porthole = document.getElementById('porthole');
+    porthole.querySelectorAll('.bolt').forEach(b => b.remove());
+    const size = Math.min(W, H) * 0.63;
+    const half = size / 2;
+    const boltR = half - 8.5;
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const x = half + boltR * Math.cos(angle) - 5.5;
+        const y = half + boltR * Math.sin(angle) - 5.5;
+        const b = document.createElement('div');
+        b.className = 'bolt';
+        b.style.cssText = `
+            position:absolute; z-index:2;
+            width:11px; height:11px; border-radius:50%;
+            background: radial-gradient(circle at 35% 35%, #222648, #07091A);
+            border: 1px solid #191D42;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.95), 0 0 4px rgba(0,229,200,0.10);
+            left:${x}px; top:${y}px;
+        `;
+        porthole.appendChild(b);
+    }
+}
+placeBolts();
+
+// ── Compass rose ─────────────────────────────────────────────────────────────
+const compassSvg = document.getElementById('compassSvg');
+let rot = 0, spinning = false;
+
+function spinCompass() {
+    if (spinning) return;
+    spinning = true;
+    const dir   = Math.random() > 0.42 ? 1 : -1;
+    const delta = dir * (Math.random() * 280 + 70);
+    rot += delta;
+    const dur = 800 + Math.random() * 1400;
+    compassSvg.style.transition = `transform ${dur}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+    compassSvg.style.transform  = `rotate(${rot}deg)`;
+    setTimeout(() => {
+        spinning = false;
+        setTimeout(spinCompass, Math.random() * 5200 + 1800);
+    }, dur + 400);
+}
+
+setTimeout(spinCompass, 1800);
+
+// ── Particles ────────────────────────────────────────────────────────────────
+const pcont = document.getElementById('particles');
+const PCOLS = [
+    `rgba(0,229,200,OP)`,
+    `rgba(232,25,90,OP)`,
+    `rgba(91,47,232,OP)`,
+    `rgba(245,168,32,OP)`,
+];
+
+for (let i = 0; i < 32; i++) {
+    const el  = document.createElement('div');
+    el.className = 'p';
+    const sz   = (Math.random() * 2.0 + 0.5).toFixed(2);
+    const cidx = i % PCOLS.length;
+    const op   = (Math.random() * 0.13 + 0.04).toFixed(2);
+    const col  = PCOLS[cidx].replace('OP', op);
+    const glow = PCOLS[cidx].replace('OP', '0.45');
+    const dur  = (Math.random() * 38 + 22).toFixed(1);
+    const dx   = ((Math.random() - 0.5) * 110).toFixed(1);
+    const ex   = ((Math.random() - 0.5) * 55).toFixed(1);
+    el.style.cssText = `
+        width:${sz}px; height:${sz}px;
+        left:${(Math.random()*100).toFixed(1)}%;
+        background:${col};
+        box-shadow: 0 0 ${(parseFloat(sz)*3).toFixed(1)}px ${glow};
+        --dx:${dx}px; --ex:${ex}px; --op:${op};
+        animation-duration:${dur}s;
+        animation-delay:${(-Math.random()*parseFloat(dur)).toFixed(1)}s;
+    `;
+    pcont.appendChild(el);
+}
+
+// ── Custom cursor ────────────────────────────────────────────────────────────
+const cur     = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+let mx = innerWidth/2, my = innerHeight/2;
+let cx = mx, cy = my;
+
+document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px';
+    cur.style.top  = my + 'px';
+});
+
+(function animRing() {
+    cx += (mx - cx) * 0.11;
+    cy += (my - cy) * 0.11;
+    curRing.style.left = cx + 'px';
+    curRing.style.top  = cy + 'px';
+    requestAnimationFrame(animRing);
+})();
+
+// ── Mouse parallax ───────────────────────────────────────────────────────────
+const pWrap = document.getElementById('pWrap');
+
+document.addEventListener('mousemove', e => {
+    const nx = (e.clientX / innerWidth  - 0.5);
+    const ny = (e.clientY / innerHeight - 0.5);
+    pWrap.style.transform = `translate(${nx * 16}px, ${ny * 10}px)`;
+});
+</script>
+</body>
+</html>
