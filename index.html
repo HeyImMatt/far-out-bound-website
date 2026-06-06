@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Far Out Bound</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,300;1,100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,300;1,100&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --black:         #030410;
-            --teal:          #00E5C8;
-            --text:          #C8C4DC;
+            --black: #030410;
+            --teal: #00E5C8;
+            --text: #C8C4DC;
             --stroke-bright: rgba(208, 188, 138, 0.90);
-            --stroke-dim:    rgba(208, 188, 138, 0.16);
+            --stroke-dim: rgba(208, 188, 138, 0.16);
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        html, body {
-            width: 100%; height: 100%;
+        html,
+        body {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             background: var(--black);
             font-family: 'Josefin Sans', sans-serif;
@@ -27,62 +37,130 @@
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--text);
+            /* Prevent iOS Safari from inflating small font sizes */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
-        #starfield { position: fixed; inset: 0; z-index: 0; }
+        #starfield {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
 
-        .neb { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        .neb {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
         .neb-a {
             background:
-                radial-gradient(ellipse 55% 38% at 10% 22%, rgba(91,47,232,0.24) 0%, transparent 70%),
-                radial-gradient(ellipse 38% 52% at 90% 78%, rgba(232,25,90,0.15) 0%, transparent 70%),
-                radial-gradient(ellipse 45% 30% at 65% 6%,  rgba(0,229,200,0.10) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 38% at 10% 22%, rgba(91, 47, 232, 0.24) 0%, transparent 70%),
+                radial-gradient(ellipse 38% 52% at 90% 78%, rgba(232, 25, 90, 0.15) 0%, transparent 70%),
+                radial-gradient(ellipse 45% 30% at 65% 6%, rgba(0, 229, 200, 0.10) 0%, transparent 65%),
                 /* bottom-left fill — prevents bare corner gap */
-                radial-gradient(ellipse 52% 48% at 0% 100%, rgba(35,15,90,0.18) 0%, transparent 68%);
+                radial-gradient(ellipse 52% 48% at 0% 100%, rgba(35, 15, 90, 0.18) 0%, transparent 68%);
             animation: nebA 26s ease-in-out infinite alternate;
         }
+
         .neb-b {
             background:
-                radial-gradient(ellipse 44% 60% at 80% 15%, rgba(30,78,240,0.18) 0%, transparent 70%),
-                radial-gradient(ellipse 34% 44% at 16% 84%, rgba(245,168,32,0.09) 0%, transparent 68%),
-                radial-gradient(ellipse 50% 34% at 42% 96%, rgba(91,47,232,0.11) 0%, transparent 70%);
+                radial-gradient(ellipse 44% 60% at 80% 15%, rgba(30, 78, 240, 0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 34% 44% at 16% 84%, rgba(245, 168, 32, 0.09) 0%, transparent 68%),
+                radial-gradient(ellipse 50% 34% at 42% 96%, rgba(91, 47, 232, 0.11) 0%, transparent 70%);
             animation: nebB 36s ease-in-out infinite alternate;
         }
+
         @keyframes nebA {
-            from { transform: translate(0,0) scale(1.12);    }
-            to   { transform: translate(-3%,4%) scale(1.20); }
+            from {
+                transform: translate(0, 0) scale(1.12);
+            }
+
+            to {
+                transform: translate(-3%, 4%) scale(1.20);
+            }
         }
+
         @keyframes nebB {
-            from { transform: translate(0,0) scale(1.20);    }
-            to   { transform: translate(4%,-3%) scale(1.14); }
+            from {
+                transform: translate(0, 0) scale(1.20);
+            }
+
+            to {
+                transform: translate(4%, -3%) scale(1.14);
+            }
         }
 
         .grain {
-            position: fixed; inset: 0;
-            z-index: 2; pointer-events: none; opacity: 0.042;
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.042;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
             animation: grainShift 0.4s steps(1) infinite;
         }
+
         @keyframes grainShift {
-            0%  { background-position:   0px   0px; }
-            25% { background-position: -43px -61px; }
-            50% { background-position:  57px  29px; }
-            75% { background-position: -19px  73px; }
+            0% {
+                background-position: 0px 0px;
+            }
+
+            25% {
+                background-position: -43px -61px;
+            }
+
+            50% {
+                background-position: 57px 29px;
+            }
+
+            75% {
+                background-position: -19px 73px;
+            }
         }
 
-        .particles { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
-        .p { position: absolute; border-radius: 50%; animation: pDrift linear infinite; }
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .p {
+            position: absolute;
+            border-radius: 50%;
+            animation: pDrift linear infinite;
+        }
+
         @keyframes pDrift {
-            from { transform: translateY(108vh) translateX(var(--dx)); opacity: 0; }
-            8%   { opacity: var(--op); }
-            92%  { opacity: var(--op); }
-            to   { transform: translateY(-8vh) translateX(calc(var(--dx) + var(--ex))); opacity: 0; }
+            from {
+                transform: translateY(108vh) translateX(var(--dx));
+                opacity: 0;
+            }
+
+            8% {
+                opacity: var(--op);
+            }
+
+            92% {
+                opacity: var(--op);
+            }
+
+            to {
+                transform: translateY(-8vh) translateX(calc(var(--dx) + var(--ex)));
+                opacity: 0;
+            }
         }
 
         .scene {
-            position: fixed; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 6vmin;
             z-index: 10;
         }
@@ -101,106 +179,165 @@
             white-space: nowrap;
             animation: fadeDrift 2.2s ease-out 0.3s both;
         }
+
         .brand-title::before {
             content: attr(data-text);
-            position: absolute; left: 0; top: 0;
-            font-family: inherit; font-weight: inherit;
-            font-size: inherit; letter-spacing: inherit;
-            text-transform: inherit; white-space: nowrap;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            white-space: nowrap;
             color: transparent;
             -webkit-text-stroke: 6px var(--stroke-dim);
-            pointer-events: none; z-index: -1;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .porthole-wrap {
             position: relative;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* ── Sonar — lazy, adrift (12s) ─────────────────────────── */
         .sonar {
-            position: absolute; border-radius: 50%;
-            border: 1px solid rgba(0,229,200,0.58);
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 229, 200, 0.58);
             pointer-events: none;
             animation: sonarPulse 12s ease-out infinite;
         }
-        .sonar:nth-child(2) { animation-delay: 4s; }
-        .sonar:nth-child(3) { animation-delay: 8s; }
+
+        .sonar:nth-child(2) {
+            animation-delay: 4s;
+        }
+
+        .sonar:nth-child(3) {
+            animation-delay: 8s;
+        }
+
         @keyframes sonarPulse {
-            0%   { width: 59vmin; height: 59vmin; opacity: 0.52; border-color: rgba(0,229,200,0.58); }
-            100% { width: 130vmin; height: 130vmin; opacity: 0;   border-color: rgba(0,229,200,0);   }
+            0% {
+                width: 59vmin;
+                height: 59vmin;
+                opacity: 0.52;
+                border-color: rgba(0, 229, 200, 0.58);
+            }
+
+            100% {
+                width: 130vmin;
+                height: 130vmin;
+                opacity: 0;
+                border-color: rgba(0, 229, 200, 0);
+            }
         }
 
         .porthole {
-            width: 57vmin; height: 57vmin;
-            border-radius: 50%; position: relative;
+            width: 57vmin;
+            height: 57vmin;
+            border-radius: 50%;
+            position: relative;
             animation: portholeAura 9s ease-in-out infinite;
         }
+
         @keyframes portholeAura {
-            0%, 100% { box-shadow: 0 0 40px rgba(185,75,15,0.22), 0 0 80px rgba(155,55,10,0.07); }
-            50%       { box-shadow: 0 0 62px rgba(215,100,22,0.40), 0 0 120px rgba(185,70,14,0.13); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(185, 75, 15, 0.22), 0 0 80px rgba(155, 55, 10, 0.07);
+            }
+
+            50% {
+                box-shadow: 0 0 62px rgba(215, 100, 22, 0.40), 0 0 120px rgba(185, 70, 14, 0.13);
+            }
         }
 
         /* Frame — more even conic gradient so no quadrant goes dark */
         .porthole-frame {
-            position: absolute; inset: 0; border-radius: 50%; z-index: 1;
-            background: conic-gradient(
-                from 0deg,
-                #0E1232 0deg,  #1C2256 45deg,
-                #0E1232 90deg, #1A2054 135deg,
-                #0E1232 180deg, #1C2256 225deg,
-                #0E1232 270deg, #1A2054 315deg,
-                #0E1232 360deg
-            );
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            z-index: 1;
+            background: conic-gradient(from 0deg,
+                    #0E1232 0deg, #1C2256 45deg,
+                    #0E1232 90deg, #1A2054 135deg,
+                    #0E1232 180deg, #1C2256 225deg,
+                    #0E1232 270deg, #1A2054 315deg,
+                    #0E1232 360deg);
             box-shadow:
                 0 0 0 2px #080A18,
-                0 6px 32px rgba(0,0,0,0.85),
-                0 0 0 3.5px rgba(255,255,255,0.022),
-                inset 0 3px 10px rgba(0,0,0,0.95),
-                inset 0 -1px 4px rgba(255,255,255,0.03),
-                inset 0 0 24px rgba(180,70,15,0.08);
+                0 6px 32px rgba(0, 0, 0, 0.85),
+                0 0 0 3.5px rgba(255, 255, 255, 0.022),
+                inset 0 3px 10px rgba(0, 0, 0, 0.95),
+                inset 0 -1px 4px rgba(255, 255, 255, 0.03),
+                inset 0 0 24px rgba(180, 70, 15, 0.08);
         }
 
         .porthole-rim {
-            position: absolute; inset: 17px; border-radius: 50%; z-index: 2;
+            position: absolute;
+            inset: 17px;
+            border-radius: 50%;
+            z-index: 2;
             background: linear-gradient(148deg, #141838 0%, #0A0C1E 55%, #13183A 100%);
             box-shadow:
                 0 0 0 1px #06070F,
-                inset 0 4px 14px rgba(0,0,0,0.97),
-                inset 0 -1px 4px rgba(255,255,255,0.025),
-                inset 0 0 0 1px rgba(255,255,255,0.03),
-                inset 0 0 20px rgba(175,65,12,0.07);
+                inset 0 4px 14px rgba(0, 0, 0, 0.97),
+                inset 0 -1px 4px rgba(255, 255, 255, 0.025),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+                inset 0 0 20px rgba(175, 65, 12, 0.07);
         }
 
         /* Glass — uniform border, no directional dark/light bias */
         .porthole-glass {
-            position: absolute; inset: 28px; border-radius: 50%; z-index: 3;
+            position: absolute;
+            inset: 28px;
+            border-radius: 50%;
+            z-index: 3;
             background: #0C0401;
-            border: 1.5px solid rgba(210,170,90,0.09);
+            border: 1.5px solid rgba(210, 170, 90, 0.09);
             box-shadow:
-                inset 0 0 30px rgba(0,0,0,0.65),
-                inset 0 0 0 1px rgba(0,0,0,0.5);
+                inset 0 0 30px rgba(0, 0, 0, 0.65),
+                inset 0 0 0 1px rgba(0, 0, 0, 0.5);
             overflow: hidden;
         }
+
         .porthole-glass::before {
-            content: ''; position: absolute; z-index: 5;
-            top: 5%; left: 11%; width: 44%; height: 26%;
-            background: radial-gradient(ellipse, rgba(255,220,150,0.07) 0%, transparent 75%);
-            border-radius: 50%; transform: rotate(-40deg); pointer-events: none;
-        }
-        .porthole-glass::after {
-            content: ''; position: absolute; inset: 0; z-index: 6;
+            content: '';
+            position: absolute;
+            z-index: 5;
+            top: 5%;
+            left: 11%;
+            width: 44%;
+            height: 26%;
+            background: radial-gradient(ellipse, rgba(255, 220, 150, 0.07) 0%, transparent 75%);
             border-radius: 50%;
-            background: repeating-linear-gradient(
-                0deg, transparent 0px, transparent 2px,
-                rgba(0,0,0,0.032) 2px, rgba(0,0,0,0.032) 4px
-            );
-            pointer-events: none; opacity: 0.40;
+            transform: rotate(-40deg);
+            pointer-events: none;
+        }
+
+        .porthole-glass::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 6;
+            border-radius: 50%;
+            background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px,
+                    rgba(0, 0, 0, 0.032) 2px, rgba(0, 0, 0, 0.032) 4px);
+            pointer-events: none;
+            opacity: 0.40;
         }
 
         .compass-full {
-            position: absolute; inset: 0; z-index: 1;
-            width: 100%; height: 100%;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
         }
 
         #compassCard {
@@ -213,34 +350,64 @@
             transform-origin: center;
             animation: vinylSpin 7s linear infinite;
         }
+
         @keyframes vinylSpin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes fadeDrift {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .footer {
-            position: fixed; bottom: 28px;
-            left: 50%; translate: -50% 0;
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            translate: -50% 0;
             z-index: 100;
-            display: flex; align-items: center; gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             animation: fadeDrift 2.2s ease-out 1.6s both;
         }
+
         .sig-dot {
-            width: 4px; height: 4px; border-radius: 50%;
-            background: var(--teal); box-shadow: 0 0 6px var(--teal);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--teal);
+            box-shadow: 0 0 6px var(--teal);
             flex-shrink: 0;
             translate: 0 -2px;
             animation: sigBlink 2.8s ease-in-out infinite;
         }
-        .sig-dot:last-child { animation-delay: 0.9s; }
-        @keyframes sigBlink {
-            0%, 100% { opacity: 0.18; }
-            50%       { opacity: 1;    }
+
+        .sig-dot:last-child {
+            animation-delay: 0.9s;
         }
+
+        @keyframes sigBlink {
+
+            0%,
+            100% {
+                opacity: 0.18;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
         .sig-text {
             font-family: 'Josefin Sans', sans-serif;
             font-weight: 100;
@@ -249,9 +416,27 @@
             letter-spacing: 0.38em;
             margin-right: -0.38em;
             color: rgba(210, 206, 228, 0.72);
+            white-space: nowrap;
+        }
+
+        /* ── Mobile portrait ─────────────────────────────────────── */
+        @media (max-width: 600px) and (orientation: portrait) {
+            .scene {
+                padding-bottom: 18vh;
+            }
+
+            .footer {
+                bottom: max(16px, env(safe-area-inset-bottom, 16px));
+            }
+
+            .sig-text {
+                letter-spacing: 0.22em;
+                margin-right: -0.22em;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <canvas id="starfield"></canvas>
@@ -273,78 +458,83 @@
                 <div class="porthole-rim"></div>
 
                 <div class="porthole-glass">
-                    <svg class="compass-full" viewBox="0 0 200 200"
-                         preserveAspectRatio="xMidYMid meet"
-                         xmlns="http://www.w3.org/2000/svg">
+                    <svg class="compass-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"
+                        xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <radialGradient id="darkBase" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%"   stop-color="#2C1208"/>
-                                <stop offset="40%"  stop-color="#1A0A03"/>
-                                <stop offset="80%"  stop-color="#0D0502"/>
-                                <stop offset="100%" stop-color="#070200"/>
+                                <stop offset="0%" stop-color="#2C1208" />
+                                <stop offset="40%" stop-color="#1A0A03" />
+                                <stop offset="80%" stop-color="#0D0502" />
+                                <stop offset="100%" stop-color="#070200" />
                             </radialGradient>
                             <radialGradient id="candleGrad" cx="47%" cy="44%" r="58%">
-                                <stop offset="0%"   stop-color="#F09028" stop-opacity="0.96"/>
-                                <stop offset="18%"  stop-color="#D46412" stop-opacity="0.88"/>
-                                <stop offset="42%"  stop-color="#963008" stop-opacity="0.80"/>
-                                <stop offset="68%"  stop-color="#4C1805" stop-opacity="0.84"/>
-                                <stop offset="88%"  stop-color="#200A02" stop-opacity="0.92"/>
-                                <stop offset="100%" stop-color="#0C0300" stop-opacity="0.97"/>
+                                <stop offset="0%" stop-color="#F09028" stop-opacity="0.96" />
+                                <stop offset="18%" stop-color="#D46412" stop-opacity="0.88" />
+                                <stop offset="42%" stop-color="#963008" stop-opacity="0.80" />
+                                <stop offset="68%" stop-color="#4C1805" stop-opacity="0.84" />
+                                <stop offset="88%" stop-color="#200A02" stop-opacity="0.92" />
+                                <stop offset="100%" stop-color="#0C0300" stop-opacity="0.97" />
                             </radialGradient>
                         </defs>
 
-                        <circle cx="100" cy="100" r="100" fill="url(#darkBase)"/>
-                        <circle id="glowOverlay" cx="100" cy="100" r="100"
-                                fill="url(#candleGrad)" opacity="0.78"/>
+                        <circle cx="100" cy="100" r="100" fill="url(#darkBase)" />
+                        <circle id="glowOverlay" cx="100" cy="100" r="100" fill="url(#candleGrad)" opacity="0.78" />
 
                         <!-- Rotating compass card -->
                         <g id="compassCard"></g>
 
                         <!-- Fixed outer bezel rings -->
-                        <circle cx="100" cy="100" r="97.5" fill="none"
-                                stroke="rgba(215,185,100,0.30)" stroke-width="1.3"/>
-                        <circle cx="100" cy="100" r="91.5" fill="none"
-                                stroke="rgba(200,160,80,0.14)" stroke-width="0.6"/>
+                        <circle cx="100" cy="100" r="97.5" fill="none" stroke="rgba(215,185,100,0.30)"
+                            stroke-width="1.3" />
+                        <circle cx="100" cy="100" r="91.5" fill="none" stroke="rgba(200,160,80,0.14)"
+                            stroke-width="0.6" />
 
                         <!-- Heading reference marker — slim elongated diamond (fixed) -->
                         <g id="lubberMarker">
                             <!-- Slim diamond: tip at top (y=1.5), widest at mid (y=9.5), tip at bottom (y=17.5) -->
-                            <polygon points="100,1.5 102.8,9.5 100,17.5 97.2,9.5"
-                                     fill="rgba(255,216,90,0.88)"/>
+                            <polygon points="100,1.5 102.8,9.5 100,17.5 97.2,9.5" fill="rgba(255,216,90,0.88)" />
                             <!-- Inner highlight line -->
-                            <line x1="100" y1="4" x2="100" y2="15"
-                                  stroke="rgba(255,242,180,0.35)" stroke-width="0.7"
-                                  stroke-linecap="round"/>
+                            <line x1="100" y1="4" x2="100" y2="15" stroke="rgba(255,242,180,0.35)" stroke-width="0.7"
+                                stroke-linecap="round" />
                         </g>
 
                         <!-- Vinyl record — rotates independently -->
                         <g id="vinylRecord">
-                            <circle cx="100" cy="100" r="23.5" fill="#0F0806"/>
+                            <circle cx="100" cy="100" r="23.5" fill="#0F0806" />
                             <!-- Groove rings -->
-                            <circle cx="100" cy="100" r="22.8" fill="none" stroke="rgba(210,150,55,0.30)" stroke-width="0.5"/>
-                            <circle cx="100" cy="100" r="21.2" fill="none" stroke="rgba(205,145,52,0.26)" stroke-width="0.45"/>
-                            <circle cx="100" cy="100" r="19.6" fill="none" stroke="rgba(198,138,48,0.22)" stroke-width="0.42"/>
-                            <circle cx="100" cy="100" r="18.0" fill="none" stroke="rgba(192,132,45,0.19)" stroke-width="0.38"/>
-                            <circle cx="100" cy="100" r="16.4" fill="none" stroke="rgba(185,126,42,0.17)" stroke-width="0.35"/>
-                            <circle cx="100" cy="100" r="14.8" fill="none" stroke="rgba(178,120,39,0.15)" stroke-width="0.32"/>
-                            <circle cx="100" cy="100" r="13.2" fill="none" stroke="rgba(172,114,36,0.13)" stroke-width="0.30"/>
-                            <circle cx="100" cy="100" r="11.6" fill="none" stroke="rgba(165,108,33,0.12)" stroke-width="0.28"/>
-                            <circle cx="100" cy="100" r="10.0" fill="none" stroke="rgba(158,102,30,0.11)" stroke-width="0.25"/>
+                            <circle cx="100" cy="100" r="22.8" fill="none" stroke="rgba(210,150,55,0.30)"
+                                stroke-width="0.5" />
+                            <circle cx="100" cy="100" r="21.2" fill="none" stroke="rgba(205,145,52,0.26)"
+                                stroke-width="0.45" />
+                            <circle cx="100" cy="100" r="19.6" fill="none" stroke="rgba(198,138,48,0.22)"
+                                stroke-width="0.42" />
+                            <circle cx="100" cy="100" r="18.0" fill="none" stroke="rgba(192,132,45,0.19)"
+                                stroke-width="0.38" />
+                            <circle cx="100" cy="100" r="16.4" fill="none" stroke="rgba(185,126,42,0.17)"
+                                stroke-width="0.35" />
+                            <circle cx="100" cy="100" r="14.8" fill="none" stroke="rgba(178,120,39,0.15)"
+                                stroke-width="0.32" />
+                            <circle cx="100" cy="100" r="13.2" fill="none" stroke="rgba(172,114,36,0.13)"
+                                stroke-width="0.30" />
+                            <circle cx="100" cy="100" r="11.6" fill="none" stroke="rgba(165,108,33,0.12)"
+                                stroke-width="0.28" />
+                            <circle cx="100" cy="100" r="10.0" fill="none" stroke="rgba(158,102,30,0.11)"
+                                stroke-width="0.25" />
                             <!-- Record label — tighter, more realistic ratio -->
-                            <circle cx="100" cy="100" r="8.5" fill="rgba(100,40,11,0.92)"/>
-                            <circle cx="100" cy="100" r="8.0" fill="none" stroke="rgba(220,168,72,0.34)" stroke-width="0.6"/>
-                            <circle cx="100" cy="100" r="6.2" fill="none" stroke="rgba(205,155,62,0.20)" stroke-width="0.4"/>
+                            <circle cx="100" cy="100" r="8.5" fill="rgba(100,40,11,0.92)" />
+                            <circle cx="100" cy="100" r="8.0" fill="none" stroke="rgba(220,168,72,0.34)"
+                                stroke-width="0.6" />
+                            <circle cx="100" cy="100" r="6.2" fill="none" stroke="rgba(205,155,62,0.20)"
+                                stroke-width="0.4" />
                             <!-- Spindle hole -->
-                            <circle cx="100" cy="100" r="1.5" fill="#080400"/>
+                            <circle cx="100" cy="100" r="1.5" fill="#080400" />
                         </g>
 
                         <!-- Vinyl shine (fixed — gives 3D illusion) -->
-                        <ellipse cx="96.5" cy="94.5" rx="5.5" ry="3.8"
-                                 fill="rgba(255,228,162,0.065)"
-                                 transform="rotate(-32, 96.5, 94.5)"/>
+                        <ellipse cx="96.5" cy="94.5" rx="5.5" ry="3.8" fill="rgba(255,228,162,0.065)"
+                            transform="rotate(-32, 96.5, 94.5)" />
                         <!-- Spindle glint -->
-                        <circle cx="100" cy="100" r="1.2"
-                                fill="rgba(255,210,105,0.88)"/>
+                        <circle cx="100" cy="100" r="1.2" fill="rgba(255,210,105,0.88)" />
                     </svg>
                 </div>
             </div>
@@ -357,80 +547,80 @@
         <div class="sig-dot"></div>
     </footer>
 
-<script>
-const SVGNS = 'http://www.w3.org/2000/svg';
+    <script>
+        const SVGNS = 'http://www.w3.org/2000/svg';
 
-// ── Starfield ────────────────────────────────────────────────────────────────
-const canvas = document.getElementById('starfield');
-const ctx    = canvas.getContext('2d');
-let W, H, stars = [];
+        // ── Starfield ────────────────────────────────────────────────────────────────
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let W, H, stars = [];
 
-const STAR_COLS = [
-    [255,255,255],[200,225,255],[255,245,205],[180,215,255],[200,255,242],
-];
+        const STAR_COLS = [
+            [255, 255, 255], [200, 225, 255], [255, 245, 205], [180, 215, 255], [200, 255, 242],
+        ];
 
-function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    W = innerWidth;
-    H = innerHeight;
-    canvas.width  = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    canvas.style.width  = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            W = innerWidth;
+            H = innerHeight;
+            canvas.width = Math.round(W * dpr);
+            canvas.height = Math.round(H * dpr);
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
 
-function mkStar() {
-    const c = STAR_COLS[Math.floor(Math.random() * STAR_COLS.length)];
-    return {
-        x: Math.random() * W, y: Math.random() * H,
-        r: Math.random() * 1.35 + 0.18,
-        base: Math.random() * 0.52 + 0.14, op: 0, col: c,
-        ts: Math.random() * 0.00095 + 0.00035,
-        to: Math.random() * Math.PI * 2,
-        dx: (Math.random() - 0.5) * 0.022,
-        dy: (Math.random() - 0.5) * 0.010,
-    };
-}
+        function mkStar() {
+            const c = STAR_COLS[Math.floor(Math.random() * STAR_COLS.length)];
+            return {
+                x: Math.random() * W, y: Math.random() * H,
+                r: Math.random() * 1.35 + 0.18,
+                base: Math.random() * 0.52 + 0.14, op: 0, col: c,
+                ts: Math.random() * 0.00095 + 0.00035,
+                to: Math.random() * Math.PI * 2,
+                dx: (Math.random() - 0.5) * 0.022,
+                dy: (Math.random() - 0.5) * 0.010,
+            };
+        }
 
-function initStars() {
-    stars = [];
-    const n = Math.floor(W * H / 2600);
-    for (let i = 0; i < n; i++) { const s = mkStar(); s.op = s.base; stars.push(s); }
-}
+        function initStars() {
+            stars = [];
+            const n = Math.floor(W * H / 2600);
+            for (let i = 0; i < n; i++) { const s = mkStar(); s.op = s.base; stars.push(s); }
+        }
 
-function drawStars(t) {
-    ctx.clearRect(0, 0, W, H);
-    for (const s of stars) {
-        s.x = (s.x + s.dx + W) % W;
-        s.y = (s.y + s.dy + H) % H;
-        s.op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.ts + s.to) * 0.17));
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.op})`;
-        ctx.fill();
-    }
-    requestAnimationFrame(drawStars);
-}
+        function drawStars(t) {
+            ctx.clearRect(0, 0, W, H);
+            for (const s of stars) {
+                s.x = (s.x + s.dx + W) % W;
+                s.y = (s.y + s.dy + H) % H;
+                s.op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.ts + s.to) * 0.17));
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.op})`;
+                ctx.fill();
+            }
+            requestAnimationFrame(drawStars);
+        }
 
-window.addEventListener('resize', () => { resize(); initStars(); placeBolts(); });
-resize(); initStars();
-requestAnimationFrame(drawStars);
+        window.addEventListener('resize', () => { resize(); initStars(); placeBolts(); });
+        resize(); initStars();
+        requestAnimationFrame(drawStars);
 
-// ── Porthole bolts ───────────────────────────────────────────────────────────
-function placeBolts() {
-    const porthole = document.getElementById('porthole');
-    porthole.querySelectorAll('.bolt').forEach(b => b.remove());
-    const size = Math.min(W, H) * 0.57;
-    const half = size / 2;
-    const boltR = half - 8.5;
-    for (let i = 0; i < 12; i++) {
-        const angle = (i / 12) * Math.PI * 2;
-        const x = half + boltR * Math.cos(angle) - 5.5;
-        const y = half + boltR * Math.sin(angle) - 5.5;
-        const b = document.createElement('div');
-        b.className = 'bolt';
-        b.style.cssText = `
+        // ── Porthole bolts ───────────────────────────────────────────────────────────
+        function placeBolts() {
+            const porthole = document.getElementById('porthole');
+            porthole.querySelectorAll('.bolt').forEach(b => b.remove());
+            const size = Math.min(W, H) * 0.57;
+            const half = size / 2;
+            const boltR = half - 8.5;
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const x = half + boltR * Math.cos(angle) - 5.5;
+                const y = half + boltR * Math.sin(angle) - 5.5;
+                const b = document.createElement('div');
+                b.className = 'bolt';
+                b.style.cssText = `
             position:absolute; z-index:2;
             width:11px; height:11px; border-radius:50%;
             background: radial-gradient(circle at 35% 35%, #222648, #07091A);
@@ -438,194 +628,195 @@ function placeBolts() {
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.95), 0 0 4px rgba(175,72,14,0.18);
             left:${x}px; top:${y}px;
         `;
-        porthole.appendChild(b);
-    }
-}
-placeBolts();
+                porthole.appendChild(b);
+            }
+        }
+        placeBolts();
 
-// ── Build compass card ───────────────────────────────────────────────────────
-(function buildCompassCard() {
-    const card = document.getElementById('compassCard');
+        // ── Build compass card ───────────────────────────────────────────────────────
+        (function buildCompassCard() {
+            const card = document.getElementById('compassCard');
 
-    // Inner radiating lines — stop at r=34 so they're well clear of labels
-    for (let deg = 0; deg < 360; deg += 45) {
-        const rad  = (deg - 90) * Math.PI / 180;
-        const line = document.createElementNS(SVGNS, 'line');
-        line.setAttribute('x1', (100 + 13 * Math.cos(rad)).toFixed(2));
-        line.setAttribute('y1', (100 + 13 * Math.sin(rad)).toFixed(2));
-        line.setAttribute('x2', (100 + 34 * Math.cos(rad)).toFixed(2));
-        line.setAttribute('y2', (100 + 34 * Math.sin(rad)).toFixed(2));
-        line.setAttribute('stroke', 'rgba(238,198,128,0.16)');
-        line.setAttribute('stroke-width', '0.5');
-        card.appendChild(line);
-    }
+            // Inner radiating lines — stop at r=34 so they're well clear of labels
+            for (let deg = 0; deg < 360; deg += 45) {
+                const rad = (deg - 90) * Math.PI / 180;
+                const line = document.createElementNS(SVGNS, 'line');
+                line.setAttribute('x1', (100 + 13 * Math.cos(rad)).toFixed(2));
+                line.setAttribute('y1', (100 + 13 * Math.sin(rad)).toFixed(2));
+                line.setAttribute('x2', (100 + 34 * Math.cos(rad)).toFixed(2));
+                line.setAttribute('y2', (100 + 34 * Math.sin(rad)).toFixed(2));
+                line.setAttribute('stroke', 'rgba(238,198,128,0.16)');
+                line.setAttribute('stroke-width', '0.5');
+                card.appendChild(line);
+            }
 
-    // Inner decorative rings — both well inside label radius
-    [34, 42].forEach((r, i) => {
-        const c = document.createElementNS(SVGNS, 'circle');
-        c.setAttribute('cx', '100'); c.setAttribute('cy', '100');
-        c.setAttribute('r', r);
-        c.setAttribute('fill', 'none');
-        c.setAttribute('stroke', `rgba(232,192,118,${i === 0 ? 0.20 : 0.12})`);
-        c.setAttribute('stroke-width', i === 0 ? '0.7' : '0.5');
-        card.appendChild(c);
-    });
+            // Inner decorative rings — both well inside label radius
+            [34, 42].forEach((r, i) => {
+                const c = document.createElementNS(SVGNS, 'circle');
+                c.setAttribute('cx', '100'); c.setAttribute('cy', '100');
+                c.setAttribute('r', r);
+                c.setAttribute('fill', 'none');
+                c.setAttribute('stroke', `rgba(232,192,118,${i === 0 ? 0.20 : 0.12})`);
+                c.setAttribute('stroke-width', i === 0 ? '0.7' : '0.5');
+                card.appendChild(c);
+            });
 
-    // Tick marks — inner ends well clear of label positions
-    // Cardinal labels @ r=57, intercardinal @ r=64
-    // Cardinal tick inner @ r=78, intercardinal @ r=82, major @ r=84, minor @ r=85.5
-    for (let deg = 0; deg < 360; deg += 5) {
-        const isCard  = deg % 90 === 0;
-        const isInter = deg % 45 === 0 && deg % 90 !== 0;
-        const isMajor = deg % 10 === 0;
+            // Tick marks — inner ends well clear of label positions
+            // Cardinal labels @ r=57, intercardinal @ r=64
+            // Cardinal tick inner @ r=78, intercardinal @ r=82, major @ r=84, minor @ r=85.5
+            for (let deg = 0; deg < 360; deg += 5) {
+                const isCard = deg % 90 === 0;
+                const isInter = deg % 45 === 0 && deg % 90 !== 0;
+                const isMajor = deg % 10 === 0;
 
-        const r1 = isCard ? 89 : (isInter ? 88.5 : (isMajor ? 88 : 87));
-        const r2 = isCard ? 78 : (isInter ? 82   : (isMajor ? 84 : 85.5));
-        const sw = isCard ? 1.6 : (isInter ? 1.2 : (isMajor ? 0.9 : 0.55));
-        const op = isCard ? 0.88 : (isInter ? 0.68 : (isMajor ? 0.46 : 0.26));
+                const r1 = isCard ? 89 : (isInter ? 88.5 : (isMajor ? 88 : 87));
+                const r2 = isCard ? 78 : (isInter ? 82 : (isMajor ? 84 : 85.5));
+                const sw = isCard ? 1.6 : (isInter ? 1.2 : (isMajor ? 0.9 : 0.55));
+                const op = isCard ? 0.88 : (isInter ? 0.68 : (isMajor ? 0.46 : 0.26));
 
-        const rad  = (deg - 90) * Math.PI / 180;
-        const line = document.createElementNS(SVGNS, 'line');
-        line.setAttribute('x1', (100 + r1 * Math.cos(rad)).toFixed(2));
-        line.setAttribute('y1', (100 + r1 * Math.sin(rad)).toFixed(2));
-        line.setAttribute('x2', (100 + r2 * Math.cos(rad)).toFixed(2));
-        line.setAttribute('y2', (100 + r2 * Math.sin(rad)).toFixed(2));
-        line.setAttribute('stroke', `rgba(248,222,162,${op})`);
-        line.setAttribute('stroke-width', sw);
-        line.setAttribute('stroke-linecap', 'round');
-        card.appendChild(line);
-    }
+                const rad = (deg - 90) * Math.PI / 180;
+                const line = document.createElementNS(SVGNS, 'line');
+                line.setAttribute('x1', (100 + r1 * Math.cos(rad)).toFixed(2));
+                line.setAttribute('y1', (100 + r1 * Math.sin(rad)).toFixed(2));
+                line.setAttribute('x2', (100 + r2 * Math.cos(rad)).toFixed(2));
+                line.setAttribute('y2', (100 + r2 * Math.sin(rad)).toFixed(2));
+                line.setAttribute('stroke', `rgba(248,222,162,${op})`);
+                line.setAttribute('stroke-width', sw);
+                line.setAttribute('stroke-linecap', 'round');
+                card.appendChild(line);
+            }
 
 
-    // Direction labels
-    // Clear separation: N label at r=57, text ≈9px radius → text edge at r≈48 (ring at r=42 — 6px gap ✓)
-    // Cardinal tick inner at r=78 → tick-to-label gap = 78-57=21, minus text radius 9 = 12px clear ✓
-    const dirs = [
-        // N slightly larger/brighter than E/S/W
-        { deg: 0,   label: 'N',  size: 18, weight: '300', op: 0.97, r: 57 },
-        { deg: 45,  label: 'NE', size: 10, weight: '100', op: 0.60, r: 64 },
-        { deg: 90,  label: 'E',  size: 16, weight: '300', op: 0.88, r: 57 },
-        { deg: 135, label: 'SE', size: 10, weight: '100', op: 0.60, r: 64 },
-        { deg: 180, label: 'S',  size: 16, weight: '300', op: 0.88, r: 57 },
-        { deg: 225, label: 'SW', size: 10, weight: '100', op: 0.60, r: 64 },
-        { deg: 270, label: 'W',  size: 16, weight: '300', op: 0.88, r: 57 },
-        { deg: 315, label: 'NW', size: 10, weight: '100', op: 0.60, r: 64 },
-    ];
+            // Direction labels
+            // Clear separation: N label at r=57, text ≈9px radius → text edge at r≈48 (ring at r=42 — 6px gap ✓)
+            // Cardinal tick inner at r=78 → tick-to-label gap = 78-57=21, minus text radius 9 = 12px clear ✓
+            const dirs = [
+                // N slightly larger/brighter than E/S/W
+                { deg: 0, label: 'N', size: 18, weight: '300', op: 0.97, r: 57 },
+                { deg: 45, label: 'NE', size: 10, weight: '100', op: 0.60, r: 64 },
+                { deg: 90, label: 'E', size: 16, weight: '300', op: 0.88, r: 57 },
+                { deg: 135, label: 'SE', size: 10, weight: '100', op: 0.60, r: 64 },
+                { deg: 180, label: 'S', size: 16, weight: '300', op: 0.88, r: 57 },
+                { deg: 225, label: 'SW', size: 10, weight: '100', op: 0.60, r: 64 },
+                { deg: 270, label: 'W', size: 16, weight: '300', op: 0.88, r: 57 },
+                { deg: 315, label: 'NW', size: 10, weight: '100', op: 0.60, r: 64 },
+            ];
 
-    dirs.forEach(({ deg, label, size, weight, op, r }) => {
-        const rad = (deg - 90) * Math.PI / 180;
-        const x   = 100 + r * Math.cos(rad);
-        const y   = 100 + r * Math.sin(rad);
-        const el  = document.createElementNS(SVGNS, 'text');
-        el.setAttribute('x', x.toFixed(2));
-        el.setAttribute('y', y.toFixed(2));
-        el.setAttribute('text-anchor', 'middle');
-        el.setAttribute('dominant-baseline', 'central');
-        el.setAttribute('transform', `rotate(${deg},${x.toFixed(2)},${y.toFixed(2)})`);
-        el.setAttribute('fill', `rgba(255,238,188,${op})`);
-        el.setAttribute('font-size', size);
-        el.setAttribute('font-family', 'Josefin Sans, sans-serif');
-        el.setAttribute('font-weight', weight);
-        el.setAttribute('letter-spacing', '0.02em');
-        el.textContent = label;
-        card.appendChild(el);
-    });
-})();
+            dirs.forEach(({ deg, label, size, weight, op, r }) => {
+                const rad = (deg - 90) * Math.PI / 180;
+                const x = 100 + r * Math.cos(rad);
+                const y = 100 + r * Math.sin(rad);
+                const el = document.createElementNS(SVGNS, 'text');
+                el.setAttribute('x', x.toFixed(2));
+                el.setAttribute('y', y.toFixed(2));
+                el.setAttribute('text-anchor', 'middle');
+                el.setAttribute('dominant-baseline', 'central');
+                el.setAttribute('transform', `rotate(${deg},${x.toFixed(2)},${y.toFixed(2)})`);
+                el.setAttribute('fill', `rgba(255,238,188,${op})`);
+                el.setAttribute('font-size', size);
+                el.setAttribute('font-family', 'Josefin Sans, sans-serif');
+                el.setAttribute('font-weight', weight);
+                el.setAttribute('letter-spacing', '0.02em');
+                el.textContent = label;
+                card.appendChild(el);
+            });
+        })();
 
-// ── Compass: drift (always) + random swings ───────────────────────────────────
-// driftT at +0.005/frame → period ≈ 2π/(0.005×60) ≈ 21s — clearly visible rocking
-const compassCard = document.getElementById('compassCard');
-let baseRot    = 0;
-let fromRot    = 0;
-let toRot      = 0;
-let spinStart  = 0;
-let spinDur    = 0;
-let isSpinning = false;
-let driftT     = 0;
+        // ── Compass: drift (always) + random swings ───────────────────────────────────
+        // driftT at +0.005/frame → period ≈ 2π/(0.005×60) ≈ 21s — clearly visible rocking
+        const compassCard = document.getElementById('compassCard');
+        let baseRot = 0;
+        let fromRot = 0;
+        let toRot = 0;
+        let spinStart = 0;
+        let spinDur = 0;
+        let isSpinning = false;
+        let driftT = 0;
 
-function easeOutCubic(t) {
-    return 1 - Math.pow(1 - Math.min(t, 1), 3);
-}
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - Math.min(t, 1), 3);
+        }
 
-function animateCompass(ts) {
-    // Three overlapping sine waves — organic boat-on-water drift
-    driftT += 0.005;
-    const drift = Math.sin(driftT) * 4.0
+        function animateCompass(ts) {
+            // Three overlapping sine waves — organic boat-on-water drift
+            driftT += 0.005;
+            const drift = Math.sin(driftT) * 4.0
                 + Math.sin(driftT * 1.618 + 1.1) * 1.8
                 + Math.sin(driftT * 0.618 + 2.5) * 1.0;
 
-    let rot;
-    if (isSpinning) {
-        const t = (ts - spinStart) / spinDur;
-        rot = fromRot + (toRot - fromRot) * easeOutCubic(t);
-        if (t >= 1) {
-            baseRot    = toRot;
-            rot        = toRot;
-            isSpinning = false;
-            setTimeout(scheduleSpin, Math.random() * 6500 + 2500);
+            let rot;
+            if (isSpinning) {
+                const t = (ts - spinStart) / spinDur;
+                rot = fromRot + (toRot - fromRot) * easeOutCubic(t);
+                if (t >= 1) {
+                    baseRot = toRot;
+                    rot = toRot;
+                    isSpinning = false;
+                    setTimeout(scheduleSpin, Math.random() * 6500 + 2500);
+                }
+            } else {
+                rot = baseRot;
+            }
+
+            compassCard.style.transform = `rotate(${rot + drift}deg)`;
+            requestAnimationFrame(animateCompass);
         }
-    } else {
-        rot = baseRot;
-    }
 
-    compassCard.style.transform = `rotate(${rot + drift}deg)`;
-    requestAnimationFrame(animateCompass);
-}
+        function scheduleSpin() {
+            const dir = Math.random() > 0.42 ? 1 : -1;
+            const delta = dir * (Math.random() * 230 + 40);
+            fromRot = baseRot;
+            toRot = baseRot + delta;
+            spinStart = performance.now();
+            spinDur = 1400 + Math.random() * 2800;
+            isSpinning = true;
+        }
 
-function scheduleSpin() {
-    const dir   = Math.random() > 0.42 ? 1 : -1;
-    const delta = dir * (Math.random() * 230 + 40);
-    fromRot    = baseRot;
-    toRot      = baseRot + delta;
-    spinStart  = performance.now();
-    spinDur    = 1400 + Math.random() * 2800;
-    isSpinning = true;
-}
+        requestAnimationFrame(animateCompass);
+        setTimeout(scheduleSpin, 2400);
 
-requestAnimationFrame(animateCompass);
-setTimeout(scheduleSpin, 2400);
+        // ── Candle glow flicker ──────────────────────────────────────────────────────
+        const glowOverlay = document.getElementById('glowOverlay');
 
-// ── Candle glow flicker ──────────────────────────────────────────────────────
-const glowOverlay = document.getElementById('glowOverlay');
+        function flickerCandle() {
+            const target = 0.42 + Math.random() * 0.58;
+            const duration = 220 + Math.random() * 3200;
+            glowOverlay.style.transition = `opacity ${duration}ms ease-in-out`;
+            glowOverlay.style.opacity = target;
+            setTimeout(flickerCandle, duration + Math.random() * 450);
+        }
+        setTimeout(flickerCandle, 600);
 
-function flickerCandle() {
-    const target   = 0.42 + Math.random() * 0.58;
-    const duration = 220 + Math.random() * 3200;
-    glowOverlay.style.transition = `opacity ${duration}ms ease-in-out`;
-    glowOverlay.style.opacity    = target;
-    setTimeout(flickerCandle, duration + Math.random() * 450);
-}
-setTimeout(flickerCandle, 600);
+        // ── Particles ────────────────────────────────────────────────────────────────
+        const pcont = document.getElementById('particles');
+        const PCOLS = [
+            'rgba(0,229,200,OP)', 'rgba(232,25,90,OP)',
+            'rgba(91,47,232,OP)', 'rgba(245,168,32,OP)',
+        ];
 
-// ── Particles ────────────────────────────────────────────────────────────────
-const pcont = document.getElementById('particles');
-const PCOLS = [
-    'rgba(0,229,200,OP)', 'rgba(232,25,90,OP)',
-    'rgba(91,47,232,OP)', 'rgba(245,168,32,OP)',
-];
-
-for (let i = 0; i < 32; i++) {
-    const el   = document.createElement('div');
-    el.className = 'p';
-    const sz   = (Math.random() * 2.0 + 0.5).toFixed(2);
-    const cidx = i % PCOLS.length;
-    const op   = (Math.random() * 0.13 + 0.04).toFixed(2);
-    const col  = PCOLS[cidx].replace('OP', op);
-    const glow = PCOLS[cidx].replace('OP', '0.45');
-    const dur  = (Math.random() * 38 + 22).toFixed(1);
-    const dx   = ((Math.random() - 0.5) * 110).toFixed(1);
-    const ex   = ((Math.random() - 0.5) * 55).toFixed(1);
-    el.style.cssText = `
+        for (let i = 0; i < 32; i++) {
+            const el = document.createElement('div');
+            el.className = 'p';
+            const sz = (Math.random() * 2.0 + 0.5).toFixed(2);
+            const cidx = i % PCOLS.length;
+            const op = (Math.random() * 0.13 + 0.04).toFixed(2);
+            const col = PCOLS[cidx].replace('OP', op);
+            const glow = PCOLS[cidx].replace('OP', '0.45');
+            const dur = (Math.random() * 38 + 22).toFixed(1);
+            const dx = ((Math.random() - 0.5) * 110).toFixed(1);
+            const ex = ((Math.random() - 0.5) * 55).toFixed(1);
+            el.style.cssText = `
         width:${sz}px; height:${sz}px;
-        left:${(Math.random()*100).toFixed(1)}%;
+        left:${(Math.random() * 100).toFixed(1)}%;
         background:${col};
-        box-shadow: 0 0 ${(parseFloat(sz)*3).toFixed(1)}px ${glow};
+        box-shadow: 0 0 ${(parseFloat(sz) * 3).toFixed(1)}px ${glow};
         --dx:${dx}px; --ex:${ex}px; --op:${op};
         animation-duration:${dur}s;
-        animation-delay:${(-Math.random()*parseFloat(dur)).toFixed(1)}s;
+        animation-delay:${(-Math.random() * parseFloat(dur)).toFixed(1)}s;
     `;
-    pcont.appendChild(el);
-}
-</script>
+            pcont.appendChild(el);
+        }
+    </script>
 </body>
+
 </html>
