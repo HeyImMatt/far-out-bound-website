@@ -161,7 +161,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6vmin;
+            gap: 8vmin;
             z-index: 10;
         }
 
@@ -370,14 +370,10 @@
         }
 
         .footer {
-            position: fixed;
-            bottom: 28px;
-            left: 50%;
-            translate: -50% 0;
-            z-index: 100;
             display: flex;
             align-items: center;
             gap: 12px;
+            z-index: 10;
             animation: fadeDrift 2.2s ease-out 1.6s both;
         }
 
@@ -410,23 +406,19 @@
 
         .sig-text {
             font-family: 'Josefin Sans', sans-serif;
-            font-weight: 100;
-            font-size: clamp(0.62rem, 1.4vmin, 0.82rem);
+            font-weight: 300;
+            font-size: clamp(0.72rem, 1.8vmin, 1rem);
             line-height: 1;
             letter-spacing: 0.38em;
             margin-right: -0.38em;
-            color: rgba(210, 206, 228, 0.72);
+            color: rgba(228, 225, 242, 0.87);
             white-space: nowrap;
         }
 
         /* ── Mobile portrait ─────────────────────────────────────── */
         @media (max-width: 600px) and (orientation: portrait) {
             .scene {
-                padding-bottom: 18vh;
-            }
-
-            .footer {
-                bottom: max(16px, env(safe-area-inset-bottom, 16px));
+                padding-bottom: calc(18vh + 30px);
             }
 
             .sig-text {
@@ -539,13 +531,13 @@
                 </div>
             </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="sig-dot"></div>
-        <span class="sig-text">New Music Coming Soon</span>
-        <div class="sig-dot"></div>
-    </footer>
+        <footer class="footer">
+            <div class="sig-dot"></div>
+            <span class="sig-text">New Music Coming Soon</span>
+            <div class="sig-dot"></div>
+        </footer>
+    </main>
 
     <script>
         const SVGNS = 'http://www.w3.org/2000/svg';
