@@ -4,806 +4,890 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#02070b">
+    <meta name="description" content="Far Out Bound is an independent electronic music project by Matt McFarland.">
     <title>Far Out Bound</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,300;1,100&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400&amp;display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --black: #030410;
-            --teal: #00E5C8;
-            --text: #C8C4DC;
-            --stroke-bright: rgba(208, 188, 138, 0.90);
-            --stroke-dim: rgba(208, 188, 138, 0.16);
+            --void: #02070b;
+            --deep: #06131a;
+            --cyan: #1fc4d8;
+            --orange: #ff7a1a;
+            --ivory: #f3d8ad;
+            --text: #bdc9cb;
+            --dim: #73878c;
+            --rule: rgba(216, 231, 233, 0.18);
         }
 
         *,
         *::before,
         *::after {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
-        html,
+        html {
+            min-width: 320px;
+            min-height: 100%;
+            background: var(--void);
+            color-scheme: dark;
+        }
+
         body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: var(--black);
-            font-family: 'Josefin Sans', sans-serif;
-            font-weight: 100;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
+            min-width: 320px;
+            min-height: 100%;
+            margin: 0;
+            overflow-x: hidden;
+            background:
+                radial-gradient(ellipse 72% 55% at 76% 12%, rgba(31, 196, 216, 0.07), transparent 65%),
+                radial-gradient(ellipse 48% 42% at 9% 88%, rgba(255, 122, 26, 0.045), transparent 68%),
+                var(--void);
             color: var(--text);
-            /* Prevent iOS Safari from inflating small font sizes */
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
+        }
+
+        button,
+        a {
+            font: inherit;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 4px;
         }
 
         #starfield {
             position: fixed;
             inset: 0;
             z-index: 0;
-        }
-
-        .neb {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-        }
-
-        .neb-a {
-            background:
-                radial-gradient(ellipse 55% 38% at 10% 22%, rgba(91, 47, 232, 0.24) 0%, transparent 70%),
-                radial-gradient(ellipse 38% 52% at 90% 78%, rgba(232, 25, 90, 0.15) 0%, transparent 70%),
-                radial-gradient(ellipse 45% 30% at 65% 6%, rgba(0, 229, 200, 0.10) 0%, transparent 65%),
-                /* bottom-left fill — prevents bare corner gap */
-                radial-gradient(ellipse 52% 48% at 0% 100%, rgba(35, 15, 90, 0.18) 0%, transparent 68%);
-            animation: nebA 26s ease-in-out infinite alternate;
-        }
-
-        .neb-b {
-            background:
-                radial-gradient(ellipse 44% 60% at 80% 15%, rgba(30, 78, 240, 0.18) 0%, transparent 70%),
-                radial-gradient(ellipse 34% 44% at 16% 84%, rgba(245, 168, 32, 0.09) 0%, transparent 68%),
-                radial-gradient(ellipse 50% 34% at 42% 96%, rgba(91, 47, 232, 0.11) 0%, transparent 70%);
-            animation: nebB 36s ease-in-out infinite alternate;
-        }
-
-        @keyframes nebA {
-            from {
-                transform: translate(0, 0) scale(1.12);
-            }
-
-            to {
-                transform: translate(-3%, 4%) scale(1.20);
-            }
-        }
-
-        @keyframes nebB {
-            from {
-                transform: translate(0, 0) scale(1.20);
-            }
-
-            to {
-                transform: translate(4%, -3%) scale(1.14);
-            }
         }
 
         .grain {
             position: fixed;
             inset: 0;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.042;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-            animation: grainShift 0.4s steps(1) infinite;
-        }
-
-        @keyframes grainShift {
-            0% {
-                background-position: 0px 0px;
-            }
-
-            25% {
-                background-position: -43px -61px;
-            }
-
-            50% {
-                background-position: 57px 29px;
-            }
-
-            75% {
-                background-position: -19px 73px;
-            }
-        }
-
-        .particles {
-            position: fixed;
-            inset: 0;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .p {
-            position: absolute;
-            border-radius: 50%;
-            animation: pDrift linear infinite;
-        }
-
-        @keyframes pDrift {
-            from {
-                transform: translateY(108vh) translateX(var(--dx));
-                opacity: 0;
-            }
-
-            8% {
-                opacity: var(--op);
-            }
-
-            92% {
-                opacity: var(--op);
-            }
-
-            to {
-                transform: translateY(-8vh) translateX(calc(var(--dx) + var(--ex)));
-                opacity: 0;
-            }
-        }
-
-        .scene {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 6vh 0;
-            z-index: 10;
-        }
-
-        .brand-title {
-            font-family: 'Josefin Sans', sans-serif;
-            font-weight: 100;
-            font-size: clamp(1.8rem, 5vmin, 4rem);
-            letter-spacing: 0.18em;
-            margin-right: -0.18em;
-            text-transform: uppercase;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--stroke-bright);
-            position: relative;
-            display: inline-block;
-            white-space: nowrap;
-            animation: fadeDrift 2.2s ease-out 0.3s both;
-        }
-
-        .brand-title::before {
-            content: attr(data-text);
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-family: inherit;
-            font-weight: inherit;
-            font-size: inherit;
-            letter-spacing: inherit;
-            text-transform: inherit;
-            white-space: nowrap;
-            color: transparent;
-            -webkit-text-stroke: 6px var(--stroke-dim);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .porthole-wrap {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ── Sonar — lazy, adrift (12s) ─────────────────────────── */
-        .sonar {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 229, 200, 0.58);
-            pointer-events: none;
-            animation: sonarPulse 12s ease-out infinite;
-        }
-
-        .sonar:nth-child(2) {
-            animation-delay: 4s;
-        }
-
-        .sonar:nth-child(3) {
-            animation-delay: 8s;
-        }
-
-        @keyframes sonarPulse {
-            0% {
-                width: 59vmin;
-                height: 59vmin;
-                opacity: 0.52;
-                border-color: rgba(0, 229, 200, 0.58);
-            }
-
-            100% {
-                width: 130vmin;
-                height: 130vmin;
-                opacity: 0;
-                border-color: rgba(0, 229, 200, 0);
-            }
-        }
-
-        .porthole {
-            width: 57vmin;
-            height: 57vmin;
-            border-radius: 50%;
-            position: relative;
-            animation: portholeAura 9s ease-in-out infinite;
-        }
-
-        @keyframes portholeAura {
-
-            0%,
-            100% {
-                box-shadow: 0 0 40px rgba(185, 75, 15, 0.22), 0 0 80px rgba(155, 55, 10, 0.07);
-            }
-
-            50% {
-                box-shadow: 0 0 62px rgba(215, 100, 22, 0.40), 0 0 120px rgba(185, 70, 14, 0.13);
-            }
-        }
-
-        /* Frame — more even conic gradient so no quadrant goes dark */
-        .porthole-frame {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
             z-index: 1;
-            background: conic-gradient(from 0deg,
-                    #0E1232 0deg, #1C2256 45deg,
-                    #0E1232 90deg, #1A2054 135deg,
-                    #0E1232 180deg, #1C2256 225deg,
-                    #0E1232 270deg, #1A2054 315deg,
-                    #0E1232 360deg);
-            box-shadow:
-                0 0 0 2px #080A18,
-                0 6px 32px rgba(0, 0, 0, 0.85),
-                0 0 0 3.5px rgba(255, 255, 255, 0.022),
-                inset 0 3px 10px rgba(0, 0, 0, 0.95),
-                inset 0 -1px 4px rgba(255, 255, 255, 0.03),
-                inset 0 0 24px rgba(180, 70, 15, 0.08);
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        .porthole-rim {
-            position: absolute;
-            inset: 17px;
-            border-radius: 50%;
+        .site-shell {
+            position: relative;
             z-index: 2;
-            background: linear-gradient(148deg, #141838 0%, #0A0C1E 55%, #13183A 100%);
-            box-shadow:
-                0 0 0 1px #06070F,
-                inset 0 4px 14px rgba(0, 0, 0, 0.97),
-                inset 0 -1px 4px rgba(255, 255, 255, 0.025),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-                inset 0 0 20px rgba(175, 65, 12, 0.07);
-        }
-
-        /* Glass — uniform border, no directional dark/light bias */
-        .porthole-glass {
-            position: absolute;
-            inset: 28px;
-            border-radius: 50%;
-            z-index: 3;
-            background: #0C0401;
-            border: 1.5px solid rgba(210, 170, 90, 0.09);
-            box-shadow:
-                inset 0 0 30px rgba(0, 0, 0, 0.65),
-                inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            min-height: 100svh;
             overflow: hidden;
+            isolation: isolate;
         }
 
-        .porthole-glass::before {
-            content: '';
+        .record-stage {
             position: absolute;
-            z-index: 5;
-            top: 5%;
-            left: 11%;
-            width: 44%;
-            height: 26%;
-            background: radial-gradient(ellipse, rgba(255, 220, 150, 0.07) 0%, transparent 75%);
-            border-radius: 50%;
-            transform: rotate(-40deg);
+            z-index: 0;
+            top: clamp(-350px, -24vw, -190px);
+            right: clamp(-140px, -8vw, -75px);
+            width: min(76vw, 920px);
+            aspect-ratio: 1;
             pointer-events: none;
         }
 
-        .porthole-glass::after {
-            content: '';
+        .record-art,
+        .record-signal {
             position: absolute;
             inset: 0;
-            z-index: 6;
-            border-radius: 50%;
-            background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px,
-                    rgba(0, 0, 0, 0.032) 2px, rgba(0, 0, 0, 0.032) 4px);
-            pointer-events: none;
-            opacity: 0.40;
-        }
-
-        .compass-full {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
             width: 100%;
             height: 100%;
+            pointer-events: none;
         }
 
-        #compassCard {
-            transform-box: fill-box;
+        .record-art {
+            z-index: 0;
+            overflow: visible;
             transform-origin: center;
+            animation: record-spin 52s linear infinite;
+            animation-play-state: paused;
+            filter: drop-shadow(0 0 28px rgba(31, 196, 216, 0.055));
         }
 
-        #vinylRecord {
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: vinylSpin 7s linear infinite;
+        .record-signal {
+            --signal-scale: 3.65;
+            z-index: -1;
+            opacity: 1;
+            transition: opacity 650ms ease 700ms;
         }
 
-        @keyframes vinylSpin {
+        .record-signal::before {
+            content: "";
+            position: absolute;
+            inset: 3%;
+            border: 1px solid rgba(31, 196, 216, 0.42);
+            border-radius: 50%;
+            box-shadow: 0 0 14px rgba(31, 196, 216, 0.12);
+            opacity: 0;
+            transform: scale(0.91);
+            animation: signal-pulse 6s cubic-bezier(0.30, 0.16, 0.38, 1) infinite;
+        }
+
+        .record-control {
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            left: 50%;
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            border: 1px solid rgba(255, 122, 26, 0.78);
+            border-radius: 50%;
+            background: rgba(3, 7, 10, 0.78);
+            color: var(--ivory);
+            cursor: pointer;
+            pointer-events: auto;
+            transform: translate(-50%, -50%);
+            transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+        }
+
+        .record-control:hover,
+        .record-control:focus-visible {
+            border-color: var(--orange);
+            background: rgba(11, 15, 17, 0.92);
+            box-shadow: 0 0 0 6px rgba(255, 122, 26, 0.10), 0 0 24px rgba(31, 196, 216, 0.16);
+            outline: none;
+        }
+
+        .record-control:disabled {
+            cursor: wait;
+            opacity: 0.45;
+        }
+
+        .record-control-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 9px solid currentColor;
+            transform: translate(-38%, -50%);
+        }
+
+        body.is-playing .record-control-icon {
+            width: 3px;
+            height: 12px;
+            border: 0;
+            background: currentColor;
+            box-shadow: 6px 0 0 currentColor;
+            transform: translate(-5px, -50%);
+        }
+
+        body.is-playing .record-art {
+            animation-play-state: running;
+        }
+
+        body.is-playing .record-signal {
+            opacity: 0;
+            transition-delay: 0ms;
+        }
+
+        body.is-playing .record-signal::before {
+            animation-play-state: paused;
+        }
+
+        @keyframes record-spin {
             to {
                 transform: rotate(360deg);
             }
         }
 
-        @keyframes fadeDrift {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .footer {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
-            animation: fadeDrift 2.2s ease-out 1.6s both;
-        }
-
-        .sig-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--teal);
-            box-shadow: 0 0 6px var(--teal);
-            flex-shrink: 0;
-            translate: 0 -2px;
-            animation: sigBlink 2.8s ease-in-out infinite;
-        }
-
-        .sig-dot:last-child {
-            animation-delay: 0.9s;
-        }
-
-        @keyframes sigBlink {
+        @keyframes signal-pulse {
 
             0%,
-            100% {
-                opacity: 0.18;
+            15% {
+                opacity: 0;
+                transform: scale(0.91);
             }
 
-            50% {
-                opacity: 1;
+            20% {
+                opacity: 0.36;
+            }
+
+            80% {
+                opacity: 0.16;
+            }
+
+            96% {
+                opacity: 0.08;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(var(--signal-scale));
             }
         }
 
-        .sig-text {
-            font-family: 'Josefin Sans', sans-serif;
-            font-weight: 300;
-            font-size: clamp(0.72rem, 1.8vmin, 1rem);
-            line-height: 1;
-            letter-spacing: 0.38em;
-            margin-right: -0.38em;
-            color: rgba(228, 225, 242, 0.87);
+        .content {
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+            width: min(1160px, calc(100% - 64px));
+            min-height: 100vh;
+            min-height: 100svh;
+            margin: 0 auto;
+            padding: clamp(300px, 43vh, 520px) 0 clamp(26px, 4vh, 54px);
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+            grid-template-areas: "identity player";
+            align-content: end;
+            align-items: end;
+            column-gap: clamp(46px, 7vw, 110px);
+            row-gap: clamp(30px, 5vh, 54px);
+        }
+
+        .identity {
+            grid-area: identity;
+            max-width: 520px;
+            pointer-events: auto;
+        }
+
+        .brand-title {
+            position: relative;
+            width: max-content;
+            max-width: 100%;
+            margin: 0;
+            color: var(--ivory);
+            font-size: clamp(3.8rem, 7vw, 7.2rem);
+            font-weight: 200;
+            line-height: 0.78;
+            letter-spacing: 0.14em;
+        }
+
+        .brand-title span {
+            position: relative;
+            display: block;
+            width: max-content;
+            white-space: nowrap;
+            text-shadow:
+                0 0 2px rgba(243, 216, 173, 0.52),
+                5px 4px 18px rgba(255, 122, 26, 0.43),
+                -4px -3px 15px rgba(31, 196, 216, 0.37);
+            filter:
+                drop-shadow(4px 3px 7px rgba(255, 122, 26, 0.23)) drop-shadow(-4px -2px 6px rgba(31, 196, 216, 0.19));
+        }
+
+        .brand-title span:last-child {
+            margin-left: 0.55em;
+        }
+
+        .project-copy {
+            max-width: 43ch;
+            margin: clamp(26px, 4vh, 42px) 0 0;
+            color: var(--text);
+            font-size: clamp(1rem, 1.35vw, 1.18rem);
+            line-height: 1.65;
+        }
+
+        .player-panel {
+            grid-area: player;
+            width: 100%;
+            max-width: 560px;
+            justify-self: end;
+            border-top: 1px solid var(--rule);
+            pointer-events: auto;
+        }
+
+        .player-heading {
+            margin: 0;
+            padding: 14px 0 4px;
+            color: var(--ivory);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .track {
+            --progress: 0%;
+            position: relative;
+            padding: 16px 0 13px;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .track-main {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .track-button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(235, 242, 242, 0.28);
+            border-radius: 50%;
+            background: rgba(2, 7, 11, 0.55);
+            color: #fff;
+            cursor: pointer;
+            transition: border-color 180ms ease, background-color 180ms ease, opacity 180ms ease;
+        }
+
+        .track-button:disabled {
+            cursor: wait;
+            opacity: 0.48;
+        }
+
+        .track.is-active .track-button {
+            border-color: var(--orange);
+            background: var(--orange);
+        }
+
+        .track-icon {
+            width: 0;
+            height: 0;
+            margin-left: 2px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid currentColor;
+        }
+
+        .track.is-playing .track-icon {
+            width: 9px;
+            height: 12px;
+            margin-left: 0;
+            border: 0;
+            background: linear-gradient(90deg, currentColor 0 3px, transparent 3px 6px, currentColor 6px 9px);
+        }
+
+        .track-title {
+            overflow: hidden;
+            color: #e8eeee;
+            font-size: clamp(1rem, 1.4vw, 1.16rem);
+            font-weight: 400;
+            text-decoration: none;
+            text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        /* ── Mobile portrait ─────────────────────────────────────── */
-        @media (max-width: 600px) and (orientation: portrait) {
-            .sig-text {
-                letter-spacing: 0.22em;
-                margin-right: -0.22em;
+        .track-title:hover {
+            color: var(--ivory);
+        }
+
+        .track-source {
+            min-height: 32px;
+            padding: 6px 9px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(31, 196, 216, 0.38);
+            border-radius: 3px;
+            background: rgba(5, 18, 24, 0.72);
+            color: var(--cyan);
+            font-size: 0.78rem;
+            font-weight: 400;
+            line-height: 1;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+        }
+
+        .track-source:hover,
+        .track-source:focus-visible {
+            border-color: var(--orange);
+            background: rgba(255, 122, 26, 0.08);
+            color: var(--ivory);
+        }
+
+        .soundcloud-icon {
+            width: 17px;
+            height: 12px;
+            flex: 0 0 auto;
+            fill: currentColor;
+            transform: translateY(0.5px);
+        }
+
+        .track-source span {
+            transform: translateY(2px);
+        }
+
+        .track-progress {
+            width: calc(100% - 56px);
+            height: 24px;
+            margin: 0 0 -11px 56px;
+            padding: 0;
+            border: 0;
+            appearance: none;
+            -webkit-appearance: none;
+            background:
+                linear-gradient(90deg,
+                    var(--orange) 0,
+                    var(--cyan) var(--progress),
+                    rgba(231, 240, 240, 0.12) var(--progress),
+                    rgba(231, 240, 240, 0.12) 100%) center / 100% 2px no-repeat;
+            cursor: pointer;
+        }
+
+        .track-progress:focus-visible {
+            outline: 1px solid var(--cyan);
+            outline-offset: -6px;
+        }
+
+        .track-progress:disabled {
+            cursor: wait;
+            opacity: 0.45;
+        }
+
+        .track-progress::-webkit-slider-thumb {
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--orange);
+            border-radius: 50%;
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--ivory);
+            box-shadow: 0 0 10px rgba(31, 196, 216, 0.26);
+            opacity: 0;
+            transition: opacity 150ms ease;
+        }
+
+        .track-progress::-moz-range-thumb {
+            width: 7px;
+            height: 7px;
+            border: 2px solid var(--orange);
+            border-radius: 50%;
+            background: var(--ivory);
+            box-shadow: 0 0 10px rgba(31, 196, 216, 0.26);
+            opacity: 0;
+            transition: opacity 150ms ease;
+        }
+
+        .track-progress:hover::-webkit-slider-thumb,
+        .track-progress:focus-visible::-webkit-slider-thumb,
+        .track-progress:active::-webkit-slider-thumb,
+        .track-progress:hover::-moz-range-thumb,
+        .track-progress:focus-visible::-moz-range-thumb,
+        .track-progress:active::-moz-range-thumb {
+            opacity: 1;
+        }
+
+        .player-status {
+            min-height: 1.25em;
+            margin: 10px 0 0;
+            color: var(--dim);
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        .soundcloud-widget {
+            position: absolute;
+            top: 0;
+            left: -10000px;
+            width: 320px;
+            height: 166px;
+            border: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 760px) {
+            .record-stage {
+                top: -158px;
+                right: -170px;
+                width: 520px;
+            }
+
+            .record-signal {
+                --signal-scale: 3.35;
+            }
+
+            .content {
+                width: min(calc(100% - 42px), 560px);
+                min-height: 100svh;
+                padding: 320px 0 24px;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "identity"
+                    "player";
+                align-content: end;
+                row-gap: 30px;
+            }
+
+            .brand-title {
+                font-size: clamp(3.4rem, 17vw, 5.15rem);
+                letter-spacing: 0.11em;
+            }
+
+            .project-copy {
+                max-width: 36ch;
+                margin-top: 28px;
+                font-size: 1rem;
+            }
+
+            .player-panel {
+                max-width: none;
+                justify-self: stretch;
+            }
+
+            .track {
+                padding: 17px 0 14px;
+            }
+
+            .track-main {
+                grid-template-columns: 46px minmax(0, 1fr) auto;
+            }
+
+            .track-button {
+                width: 44px;
+                height: 44px;
+            }
+
+            .track-progress {
+                margin-left: 60px;
+            }
+
+        }
+
+        @media (max-width: 390px) {
+            .content {
+                width: calc(100% - 32px);
+            }
+
+            .brand-title {
+                font-size: clamp(3rem, 16vw, 4rem);
+            }
+
+            .track-main {
+                gap: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+
+            body.is-playing .record-art {
+                filter: drop-shadow(0 0 28px rgba(31, 196, 216, 0.16));
             }
         }
     </style>
 </head>
 
 <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
 
-    <canvas id="starfield"></canvas>
-    <div class="neb neb-a"></div>
-    <div class="neb neb-b"></div>
-    <div class="grain"></div>
-    <div class="particles" id="particles"></div>
-
-    <main class="scene">
-        <div class="brand-title" data-text="Far Out Bound">Far Out Bound</div>
-
-        <div class="porthole-wrap" id="pWrap">
-            <div class="sonar"></div>
-            <div class="sonar"></div>
-            <div class="sonar"></div>
-
-            <div class="porthole" id="porthole">
-                <div class="porthole-frame"></div>
-                <div class="porthole-rim"></div>
-
-                <div class="porthole-glass">
-                    <svg class="compass-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <radialGradient id="darkBase" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" stop-color="#2C1208" />
-                                <stop offset="40%" stop-color="#1A0A03" />
-                                <stop offset="80%" stop-color="#0D0502" />
-                                <stop offset="100%" stop-color="#070200" />
-                            </radialGradient>
-                            <radialGradient id="candleGrad" cx="47%" cy="44%" r="58%">
-                                <stop offset="0%" stop-color="#F09028" stop-opacity="0.96" />
-                                <stop offset="18%" stop-color="#D46412" stop-opacity="0.88" />
-                                <stop offset="42%" stop-color="#963008" stop-opacity="0.80" />
-                                <stop offset="68%" stop-color="#4C1805" stop-opacity="0.84" />
-                                <stop offset="88%" stop-color="#200A02" stop-opacity="0.92" />
-                                <stop offset="100%" stop-color="#0C0300" stop-opacity="0.97" />
-                            </radialGradient>
-                        </defs>
-
-                        <circle cx="100" cy="100" r="100" fill="url(#darkBase)" />
-                        <circle id="glowOverlay" cx="100" cy="100" r="100" fill="url(#candleGrad)" opacity="0.78" />
-
-                        <!-- Rotating compass card -->
-                        <g id="compassCard"></g>
-
-                        <!-- Fixed outer bezel rings -->
-                        <circle cx="100" cy="100" r="97.5" fill="none" stroke="rgba(215,185,100,0.30)"
-                            stroke-width="1.3" />
-                        <circle cx="100" cy="100" r="91.5" fill="none" stroke="rgba(200,160,80,0.14)"
-                            stroke-width="0.6" />
-
-                        <!-- Heading reference marker — slim elongated diamond (fixed) -->
-                        <g id="lubberMarker">
-                            <!-- Slim diamond: tip at top (y=1.5), widest at mid (y=9.5), tip at bottom (y=17.5) -->
-                            <polygon points="100,1.5 102.8,9.5 100,17.5 97.2,9.5" fill="rgba(255,216,90,0.88)" />
-                            <!-- Inner highlight line -->
-                            <line x1="100" y1="4" x2="100" y2="15" stroke="rgba(255,242,180,0.35)" stroke-width="0.7"
-                                stroke-linecap="round" />
-                        </g>
-
-                        <!-- Vinyl record — rotates independently -->
-                        <g id="vinylRecord">
-                            <circle cx="100" cy="100" r="23.5" fill="#0F0806" />
-                            <!-- Groove rings -->
-                            <circle cx="100" cy="100" r="22.8" fill="none" stroke="rgba(210,150,55,0.30)"
-                                stroke-width="0.5" />
-                            <circle cx="100" cy="100" r="21.2" fill="none" stroke="rgba(205,145,52,0.26)"
-                                stroke-width="0.45" />
-                            <circle cx="100" cy="100" r="19.6" fill="none" stroke="rgba(198,138,48,0.22)"
-                                stroke-width="0.42" />
-                            <circle cx="100" cy="100" r="18.0" fill="none" stroke="rgba(192,132,45,0.19)"
-                                stroke-width="0.38" />
-                            <circle cx="100" cy="100" r="16.4" fill="none" stroke="rgba(185,126,42,0.17)"
-                                stroke-width="0.35" />
-                            <circle cx="100" cy="100" r="14.8" fill="none" stroke="rgba(178,120,39,0.15)"
-                                stroke-width="0.32" />
-                            <circle cx="100" cy="100" r="13.2" fill="none" stroke="rgba(172,114,36,0.13)"
-                                stroke-width="0.30" />
-                            <circle cx="100" cy="100" r="11.6" fill="none" stroke="rgba(165,108,33,0.12)"
-                                stroke-width="0.28" />
-                            <circle cx="100" cy="100" r="10.0" fill="none" stroke="rgba(158,102,30,0.11)"
-                                stroke-width="0.25" />
-                            <!-- Record label — tighter, more realistic ratio -->
-                            <circle cx="100" cy="100" r="8.5" fill="rgba(100,40,11,0.92)" />
-                            <circle cx="100" cy="100" r="8.0" fill="none" stroke="rgba(220,168,72,0.34)"
-                                stroke-width="0.6" />
-                            <circle cx="100" cy="100" r="6.2" fill="none" stroke="rgba(205,155,62,0.20)"
-                                stroke-width="0.4" />
-                            <!-- Spindle hole -->
-                            <circle cx="100" cy="100" r="1.5" fill="#080400" />
-                        </g>
-
-                        <!-- Vinyl shine (fixed — gives 3D illusion) -->
-                        <ellipse cx="96.5" cy="94.5" rx="5.5" ry="3.8" fill="rgba(255,228,162,0.065)"
-                            transform="rotate(-32, 96.5, 94.5)" />
-                        <!-- Spindle glint -->
-                        <circle cx="100" cy="100" r="1.2" fill="rgba(255,210,105,0.88)" />
-                    </svg>
-                </div>
-            </div>
+    <main class="site-shell">
+        <div class="record-stage">
+            <div class="record-signal" aria-hidden="true"></div>
+            <svg class="record-art" viewBox="0 0 700 700" aria-hidden="true">
+                <defs>
+                    <linearGradient id="blue-fade" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#1fc4d8" stop-opacity="0" />
+                        <stop offset=".28" stop-color="#1fc4d8" stop-opacity=".32" />
+                        <stop offset=".64" stop-color="#1fc4d8" stop-opacity=".60" />
+                        <stop offset="1" stop-color="#1fc4d8" stop-opacity=".03" />
+                    </linearGradient>
+                    <linearGradient id="warm-fade" x1="1" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#ff7a1a" stop-opacity="0" />
+                        <stop offset=".38" stop-color="#ff7a1a" stop-opacity=".32" />
+                        <stop offset=".72" stop-color="#f3d8ad" stop-opacity=".24" />
+                        <stop offset="1" stop-color="#ff7a1a" stop-opacity="0" />
+                    </linearGradient>
+                    <radialGradient id="record-shade">
+                        <stop offset="0" stop-color="#071116" />
+                        <stop offset=".74" stop-color="#03080b" />
+                        <stop offset="1" stop-color="#010406" />
+                    </radialGradient>
+                </defs>
+                <circle cx="350" cy="350" r="330" fill="url(#record-shade)" opacity=".76" />
+                <g fill="none" stroke-linecap="round">
+                    <circle cx="350" cy="350" r="320" stroke="url(#blue-fade)" stroke-width="1.6"
+                        stroke-dasharray="720 160 80 310" />
+                    <circle cx="350" cy="350" r="308" stroke="#122e35" stroke-opacity=".58" stroke-width=".7"
+                        stroke-dasharray="940 500" />
+                    <circle cx="350" cy="350" r="296" stroke="#1fc4d8" stroke-opacity=".5" stroke-width="1.6"
+                        stroke-dasharray=".1 7.8 0 11" />
+                    <circle cx="350" cy="350" r="284" stroke="url(#warm-fade)" stroke-width="1.1"
+                        stroke-dasharray="410 90 260 480" />
+                    <circle cx="350" cy="350" r="271" stroke="#f3d8ad" stroke-opacity=".35" stroke-width="1.2"
+                        stroke-dasharray=".1 12.5 0 6.5 0 18" />
+                    <circle cx="350" cy="350" r="259" stroke="#0f3037" stroke-opacity=".72" stroke-width=".7"
+                        stroke-dasharray="870 520" />
+                    <circle cx="350" cy="350" r="247" stroke="url(#blue-fade)" stroke-width="1.4"
+                        stroke-dasharray="520 80 180 360" />
+                    <circle cx="350" cy="350" r="235" stroke="#1fc4d8" stroke-opacity=".62" stroke-width="1.4"
+                        stroke-dasharray=".1 6.4 0 14.5" />
+                    <circle cx="350" cy="350" r="222" stroke="#17343a" stroke-opacity=".62" stroke-width=".65"
+                        stroke-dasharray="580 110 250 450" />
+                    <circle cx="350" cy="350" r="210" stroke="#ff7a1a" stroke-opacity=".45" stroke-width="1.35"
+                        stroke-dasharray=".1 15 0 8 0 22" />
+                    <circle cx="350" cy="350" r="198" stroke="url(#warm-fade)" stroke-width="1"
+                        stroke-dasharray="320 70 170 510" />
+                    <circle cx="350" cy="350" r="185" stroke="#1fc4d8" stroke-opacity=".52" stroke-width="1.25"
+                        stroke-dasharray=".1 8.2 0 5.4 0 17" />
+                    <circle cx="350" cy="350" r="173" stroke="#0d2b31" stroke-opacity=".8" stroke-width=".7"
+                        stroke-dasharray="640 310" />
+                    <circle cx="350" cy="350" r="160" stroke="url(#blue-fade)" stroke-width="1.2"
+                        stroke-dasharray="290 55 130 470" />
+                    <circle cx="350" cy="350" r="147" stroke="#f3d8ad" stroke-opacity=".3" stroke-width="1.15"
+                        stroke-dasharray=".1 11.5 0 7.4" />
+                    <circle cx="350" cy="350" r="134" stroke="#ff7a1a" stroke-opacity=".35" stroke-width=".9"
+                        stroke-dasharray="250 95 120 390" />
+                    <circle cx="350" cy="350" r="121" stroke="#12353b" stroke-opacity=".8" stroke-width=".65"
+                        stroke-dasharray="520 240" />
+                    <circle cx="350" cy="350" r="108" stroke="#1fc4d8" stroke-opacity=".6" stroke-width="1.2"
+                        stroke-dasharray=".1 6.8 0 16" />
+                    <circle cx="350" cy="350" r="94" stroke="url(#warm-fade)" stroke-width="1"
+                        stroke-dasharray="170 50 110 260" />
+                </g>
+                <circle cx="350" cy="350" r="72" fill="#03070a" stroke="#ff7a1a" stroke-opacity=".68"
+                    stroke-width="1.4" />
+                <circle cx="350" cy="350" r="57" fill="none" stroke="#1fc4d8" stroke-opacity=".22" />
+                <circle cx="350" cy="350" r="7" fill="#f3d8ad" stroke="#ff7a1a" stroke-width="3" />
+            </svg>
+            <button class="record-control" type="button" aria-label="Play Launch" aria-pressed="false" disabled>
+                <span class="record-control-icon" aria-hidden="true"></span>
+            </button>
         </div>
 
-        <footer class="footer">
-            <div class="sig-dot"></div>
-            <span class="sig-text">New Music Coming Soon</span>
-            <div class="sig-dot"></div>
-        </footer>
+        <div class="content">
+            <section class="identity" aria-labelledby="brand-title">
+                <h1 class="brand-title" id="brand-title" aria-label="Far Out Bound">
+                    <span data-text="FAR OUT" aria-hidden="true">FAR OUT</span>
+                    <span data-text="BOUND" aria-hidden="true">BOUND</span>
+                </h1>
+                <p class="project-copy">Far Out Bound is a solo synthpop indietronica project from Portland,
+                    Oregon-based artist Farbo. The music is built with warm synths, lively grooves, and stacks of
+                    self-harmonized vocals, while the songs drift between themes of disillusionment, exploration, and
+                    reinvention.
+                </p>
+            </section>
+
+            <section class="player-panel" aria-labelledby="listen-heading">
+                <h2 class="player-heading" id="listen-heading">Listen</h2>
+
+                <article class="track" data-track-id="launch">
+                    <div class="track-main">
+                        <button class="track-button" type="button" aria-label="Play Launch" aria-pressed="false"
+                            disabled>
+                            <span class="track-icon" aria-hidden="true"></span>
+                        </button>
+                        <a class="track-title" href="https://soundcloud.com/far-out-bound/launch">Launch</a>
+                        <a class="track-source" href="https://soundcloud.com/far-out-bound/launch" target="_blank"
+                            rel="noopener noreferrer" aria-label="Open Launch on SoundCloud in a new tab">
+                            <svg class="soundcloud-icon" viewBox="0 0 24 16" aria-hidden="true">
+                                <path
+                                    d="M1 10h1v4H1zm2-3h1v7H3zm2-2h1v9H5zm2-1h1v10H7zm2 2h1v8H9zm2-1.2A5.3 5.3 0 0 1 21.4 7 3.5 3.5 0 0 1 21 14H11Z" />
+                            </svg>
+                            <span>SoundCloud</span>
+                        </a>
+                    </div>
+                    <input class="track-progress" type="range" min="0" max="1000" value="0" aria-label="Seek Launch"
+                        aria-valuetext="0%" disabled>
+                    <iframe class="soundcloud-widget" id="widget-launch" title="SoundCloud player for Launch"
+                        tabindex="-1" aria-hidden="true" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/far-out-bound/launch&amp;color=%23ff7a1a&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"></iframe>
+                </article>
+
+                <article class="track" data-track-id="days">
+                    <div class="track-main">
+                        <button class="track-button" type="button" aria-label="Play One of These Days"
+                            aria-pressed="false" disabled>
+                            <span class="track-icon" aria-hidden="true"></span>
+                        </button>
+                        <a class="track-title" href="https://soundcloud.com/far-out-bound/one-of-these-days">One of
+                            These Days</a>
+                        <a class="track-source" href="https://soundcloud.com/far-out-bound/one-of-these-days"
+                            target="_blank" rel="noopener noreferrer"
+                            aria-label="Open One of These Days on SoundCloud in a new tab">
+                            <svg class="soundcloud-icon" viewBox="0 0 24 16" aria-hidden="true">
+                                <path
+                                    d="M1 10h1v4H1zm2-3h1v7H3zm2-2h1v9H5zm2-1h1v10H7zm2 2h1v8H9zm2-1.2A5.3 5.3 0 0 1 21.4 7 3.5 3.5 0 0 1 21 14H11Z" />
+                            </svg>
+                            <span>SoundCloud</span>
+                        </a>
+                    </div>
+                    <input class="track-progress" type="range" min="0" max="1000" value="0"
+                        aria-label="Seek One of These Days" aria-valuetext="0%" disabled>
+                    <iframe class="soundcloud-widget" id="widget-days" title="SoundCloud player for One of These Days"
+                        tabindex="-1" aria-hidden="true" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/far-out-bound/one-of-these-days&amp;color=%23ff7a1a&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"></iframe>
+                </article>
+
+                <p class="player-status" role="status" aria-live="polite">Loading players…</p>
+            </section>
+
+        </div>
     </main>
 
-    <script>
-        const SVGNS = 'http://www.w3.org/2000/svg';
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    <script type="module">
+        import { createPlayerController } from './js/player-controller.mjs?v=20261003';
 
-        // ── Starfield ────────────────────────────────────────────────────────────────
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let W, H, stars = [];
+        const trackIds = ['launch', 'days'];
+        const rows = new Map(trackIds.map(id => [id, document.querySelector(`[data-track-id="${id}"]`)]));
+        const status = document.querySelector('.player-status');
+        const recordButton = document.querySelector('.record-control');
 
-        const STAR_COLS = [
-            [255, 255, 255], [200, 225, 255], [255, 245, 205], [180, 215, 255], [200, 255, 242],
-        ];
+        const controller = createPlayerController(trackIds, {
+            onReady() {
+                status.textContent = '';
+            },
+            onStateChange({ activeId, playing }) {
+                document.body.classList.toggle('is-playing', playing);
+                for (const [id, row] of rows) {
+                    const isActive = id === activeId;
+                    const isPlaying = isActive && playing;
+                    const button = row.querySelector('.track-button');
+                    row.classList.toggle('is-active', isActive);
+                    row.classList.toggle('is-playing', isPlaying);
+                    button.setAttribute('aria-pressed', String(isPlaying));
+                    button.setAttribute('aria-label', `${isPlaying ? 'Pause' : 'Play'} ${row.querySelector('.track-title').textContent}`);
+                }
+                if (activeId) {
+                    const title = rows.get(activeId).querySelector('.track-title').textContent;
+                    status.textContent = playing ? `Playing ${title}` : `${title} paused`;
+                }
+                const recordTitle = activeId
+                    ? rows.get(activeId).querySelector('.track-title').textContent
+                    : 'Launch';
+                recordButton.setAttribute('aria-pressed', String(playing));
+                recordButton.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} ${recordTitle}`);
+            },
+            onProgress(id, ratio) {
+                const progress = rows.get(id).querySelector('.track-progress');
+                progress.value = String(Math.round(ratio * 1000));
+                progress.setAttribute('aria-valuetext', `${Math.round(ratio * 100)}%`);
+                rows.get(id).style.setProperty('--progress', `${ratio * 100}%`);
+            },
+            onError(id) {
+                const row = rows.get(id);
+                const title = row.querySelector('.track-title').textContent;
+                row.querySelector('.track-button').disabled = true;
+                row.querySelector('.track-progress').disabled = true;
+                status.textContent = `${title} could not load here. Open it on SoundCloud instead.`;
+            },
+        });
 
-        function resize() {
-            const dpr = window.devicePixelRatio || 1;
-            W = innerWidth;
-            H = innerHeight;
-            canvas.width = Math.round(W * dpr);
-            canvas.height = Math.round(H * dpr);
-            canvas.style.width = W + 'px';
-            canvas.style.height = H + 'px';
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        recordButton.addEventListener('click', () => controller.toggleCurrentOr('launch'));
+
+        for (const [id, row] of rows) {
+            const button = row.querySelector('.track-button');
+            const progress = row.querySelector('.track-progress');
+            button.addEventListener('click', () => controller.toggle(id));
+            progress.addEventListener('input', () => controller.seek(id, Number(progress.value) / 1000));
+
+            if (!window.SC?.Widget) {
+                button.disabled = true;
+                status.textContent = 'Players unavailable. Listen on SoundCloud instead.';
+                continue;
+            }
+
+            const widget = window.SC.Widget(row.querySelector('iframe'));
+            widget.bind(window.SC.Widget.Events.READY, () => {
+                controller.register(id, widget);
+                button.disabled = false;
+                progress.disabled = false;
+                if (id === 'launch') recordButton.disabled = false;
+            });
+            widget.bind(window.SC.Widget.Events.PLAY, () => controller.handlePlay(id));
+            widget.bind(window.SC.Widget.Events.PAUSE, () => controller.handlePause(id));
+            widget.bind(window.SC.Widget.Events.FINISH, () => {
+                controller.handleProgress(id, 0);
+                controller.handlePause(id);
+            });
+            widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, event => controller.handleProgress(id, event.relativePosition));
+            widget.bind(window.SC.Widget.Events.ERROR, () => controller.handleError(id));
         }
 
-        function mkStar() {
-            const c = STAR_COLS[Math.floor(Math.random() * STAR_COLS.length)];
+        const canvas = document.getElementById('starfield');
+        const context = canvas.getContext('2d');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const colors = [[255, 255, 255], [205, 231, 244], [243, 216, 173], [171, 225, 232]];
+        let width = 0;
+        let height = 0;
+        let stars = [];
+        let animationFrame = null;
+
+        function makeStar() {
             return {
-                x: Math.random() * W, y: Math.random() * H,
-                r: Math.random() * 1.35 + 0.18,
-                base: Math.random() * 0.52 + 0.14, op: 0, col: c,
-                ts: Math.random() * 0.00095 + 0.00035,
-                to: Math.random() * Math.PI * 2,
-                dx: (Math.random() - 0.5) * 0.022,
-                dy: (Math.random() - 0.5) * 0.010,
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.15 + 0.15,
+                base: Math.random() * 0.42 + 0.08,
+                phase: Math.random() * Math.PI * 2,
+                speed: Math.random() * 0.00075 + 0.0002,
+                dx: (Math.random() - 0.5) * 0.012,
+                dy: (Math.random() - 0.5) * 0.006,
+                color: colors[Math.floor(Math.random() * colors.length)],
             };
         }
 
-        function initStars() {
-            stars = [];
-            const n = Math.floor(W * H / 2600);
-            for (let i = 0; i < n; i++) { const s = mkStar(); s.op = s.base; stars.push(s); }
+        function resizeStars() {
+            const pixelRatio = window.devicePixelRatio || 1;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = Math.round(width * pixelRatio);
+            canvas.height = Math.round(height * pixelRatio);
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+            stars = Array.from({ length: Math.floor(width * height / 5600) }, makeStar);
         }
 
-        function drawStars(t) {
-            ctx.clearRect(0, 0, W, H);
-            for (const s of stars) {
-                s.x = (s.x + s.dx + W) % W;
-                s.y = (s.y + s.dy + H) % H;
-                s.op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.ts + s.to) * 0.17));
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.op})`;
-                ctx.fill();
-            }
-            requestAnimationFrame(drawStars);
-        }
-
-        window.addEventListener('resize', () => { resize(); initStars(); placeBolts(); });
-        resize(); initStars();
-        requestAnimationFrame(drawStars);
-
-        // ── Porthole bolts ───────────────────────────────────────────────────────────
-        function placeBolts() {
-            const porthole = document.getElementById('porthole');
-            porthole.querySelectorAll('.bolt').forEach(b => b.remove());
-            const size = Math.min(W, H) * 0.57;
-            const half = size / 2;
-            const boltR = half - 8.5;
-            for (let i = 0; i < 12; i++) {
-                const angle = (i / 12) * Math.PI * 2;
-                const x = half + boltR * Math.cos(angle) - 5.5;
-                const y = half + boltR * Math.sin(angle) - 5.5;
-                const b = document.createElement('div');
-                b.className = 'bolt';
-                b.style.cssText = `
-            position:absolute; z-index:2;
-            width:11px; height:11px; border-radius:50%;
-            background: radial-gradient(circle at 35% 35%, #222648, #07091A);
-            border: 1px solid #191D42;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.95), 0 0 4px rgba(175,72,14,0.18);
-            left:${x}px; top:${y}px;
-        `;
-                porthole.appendChild(b);
-            }
-        }
-        placeBolts();
-
-        // ── Build compass card ───────────────────────────────────────────────────────
-        (function buildCompassCard() {
-            const card = document.getElementById('compassCard');
-
-            // Inner radiating lines — stop at r=34 so they're well clear of labels
-            for (let deg = 0; deg < 360; deg += 45) {
-                const rad = (deg - 90) * Math.PI / 180;
-                const line = document.createElementNS(SVGNS, 'line');
-                line.setAttribute('x1', (100 + 13 * Math.cos(rad)).toFixed(2));
-                line.setAttribute('y1', (100 + 13 * Math.sin(rad)).toFixed(2));
-                line.setAttribute('x2', (100 + 34 * Math.cos(rad)).toFixed(2));
-                line.setAttribute('y2', (100 + 34 * Math.sin(rad)).toFixed(2));
-                line.setAttribute('stroke', 'rgba(238,198,128,0.16)');
-                line.setAttribute('stroke-width', '0.5');
-                card.appendChild(line);
-            }
-
-            // Inner decorative rings — both well inside label radius
-            [34, 42].forEach((r, i) => {
-                const c = document.createElementNS(SVGNS, 'circle');
-                c.setAttribute('cx', '100'); c.setAttribute('cy', '100');
-                c.setAttribute('r', r);
-                c.setAttribute('fill', 'none');
-                c.setAttribute('stroke', `rgba(232,192,118,${i === 0 ? 0.20 : 0.12})`);
-                c.setAttribute('stroke-width', i === 0 ? '0.7' : '0.5');
-                card.appendChild(c);
-            });
-
-            // Tick marks — inner ends well clear of label positions
-            // Cardinal labels @ r=57, intercardinal @ r=64
-            // Cardinal tick inner @ r=78, intercardinal @ r=82, major @ r=84, minor @ r=85.5
-            for (let deg = 0; deg < 360; deg += 5) {
-                const isCard = deg % 90 === 0;
-                const isInter = deg % 45 === 0 && deg % 90 !== 0;
-                const isMajor = deg % 10 === 0;
-
-                const r1 = isCard ? 89 : (isInter ? 88.5 : (isMajor ? 88 : 87));
-                const r2 = isCard ? 78 : (isInter ? 82 : (isMajor ? 84 : 85.5));
-                const sw = isCard ? 1.6 : (isInter ? 1.2 : (isMajor ? 0.9 : 0.55));
-                const op = isCard ? 0.88 : (isInter ? 0.68 : (isMajor ? 0.46 : 0.26));
-
-                const rad = (deg - 90) * Math.PI / 180;
-                const line = document.createElementNS(SVGNS, 'line');
-                line.setAttribute('x1', (100 + r1 * Math.cos(rad)).toFixed(2));
-                line.setAttribute('y1', (100 + r1 * Math.sin(rad)).toFixed(2));
-                line.setAttribute('x2', (100 + r2 * Math.cos(rad)).toFixed(2));
-                line.setAttribute('y2', (100 + r2 * Math.sin(rad)).toFixed(2));
-                line.setAttribute('stroke', `rgba(248,222,162,${op})`);
-                line.setAttribute('stroke-width', sw);
-                line.setAttribute('stroke-linecap', 'round');
-                card.appendChild(line);
-            }
-
-
-            // Direction labels
-            // Clear separation: N label at r=57, text ≈9px radius → text edge at r≈48 (ring at r=42 — 6px gap ✓)
-            // Cardinal tick inner at r=78 → tick-to-label gap = 78-57=21, minus text radius 9 = 12px clear ✓
-            const dirs = [
-                // N slightly larger/brighter than E/S/W
-                { deg: 0, label: 'N', size: 18, weight: '300', op: 0.97, r: 57 },
-                { deg: 45, label: 'NE', size: 10, weight: '100', op: 0.60, r: 64 },
-                { deg: 90, label: 'E', size: 16, weight: '300', op: 0.88, r: 57 },
-                { deg: 135, label: 'SE', size: 10, weight: '100', op: 0.60, r: 64 },
-                { deg: 180, label: 'S', size: 16, weight: '300', op: 0.88, r: 57 },
-                { deg: 225, label: 'SW', size: 10, weight: '100', op: 0.60, r: 64 },
-                { deg: 270, label: 'W', size: 16, weight: '300', op: 0.88, r: 57 },
-                { deg: 315, label: 'NW', size: 10, weight: '100', op: 0.60, r: 64 },
-            ];
-
-            dirs.forEach(({ deg, label, size, weight, op, r }) => {
-                const rad = (deg - 90) * Math.PI / 180;
-                const x = 100 + r * Math.cos(rad);
-                const y = 100 + r * Math.sin(rad);
-                const el = document.createElementNS(SVGNS, 'text');
-                el.setAttribute('x', x.toFixed(2));
-                el.setAttribute('y', y.toFixed(2));
-                el.setAttribute('text-anchor', 'middle');
-                el.setAttribute('dominant-baseline', 'central');
-                el.setAttribute('transform', `rotate(${deg},${x.toFixed(2)},${y.toFixed(2)})`);
-                el.setAttribute('fill', `rgba(255,238,188,${op})`);
-                el.setAttribute('font-size', size);
-                el.setAttribute('font-family', 'Josefin Sans, sans-serif');
-                el.setAttribute('font-weight', weight);
-                el.setAttribute('letter-spacing', '0.02em');
-                el.textContent = label;
-                card.appendChild(el);
-            });
-        })();
-
-        // ── Compass: drift (always) + random swings ───────────────────────────────────
-        // driftT at +0.005/frame → period ≈ 2π/(0.005×60) ≈ 21s — clearly visible rocking
-        const compassCard = document.getElementById('compassCard');
-        let baseRot = 0;
-        let fromRot = 0;
-        let toRot = 0;
-        let spinStart = 0;
-        let spinDur = 0;
-        let isSpinning = false;
-        let driftT = 0;
-
-        function easeOutCubic(t) {
-            return 1 - Math.pow(1 - Math.min(t, 1), 3);
-        }
-
-        function animateCompass(ts) {
-            // Three overlapping sine waves — organic boat-on-water drift
-            driftT += 0.005;
-            const drift = Math.sin(driftT) * 4.0
-                + Math.sin(driftT * 1.618 + 1.1) * 1.8
-                + Math.sin(driftT * 0.618 + 2.5) * 1.0;
-
-            let rot;
-            if (isSpinning) {
-                const t = (ts - spinStart) / spinDur;
-                rot = fromRot + (toRot - fromRot) * easeOutCubic(t);
-                if (t >= 1) {
-                    baseRot = toRot;
-                    rot = toRot;
-                    isSpinning = false;
-                    setTimeout(scheduleSpin, Math.random() * 6500 + 2500);
+        function drawStars(time = 0) {
+            context.clearRect(0, 0, width, height);
+            for (const star of stars) {
+                if (!reduceMotion.matches) {
+                    star.x = (star.x + star.dx + width) % width;
+                    star.y = (star.y + star.dy + height) % height;
                 }
-            } else {
-                rot = baseRot;
+                const opacity = reduceMotion.matches
+                    ? star.base
+                    : Math.max(0.04, star.base + Math.sin(time * star.speed + star.phase) * 0.15);
+                context.beginPath();
+                context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                context.fillStyle = `rgba(${star.color[0]},${star.color[1]},${star.color[2]},${opacity})`;
+                context.fill();
             }
-
-            compassCard.style.transform = `rotate(${rot + drift}deg)`;
-            requestAnimationFrame(animateCompass);
+            animationFrame = reduceMotion.matches ? null : window.requestAnimationFrame(drawStars);
         }
 
-        function scheduleSpin() {
-            const dir = Math.random() > 0.42 ? 1 : -1;
-            const delta = dir * (Math.random() * 230 + 40);
-            fromRot = baseRot;
-            toRot = baseRot + delta;
-            spinStart = performance.now();
-            spinDur = 1400 + Math.random() * 2800;
-            isSpinning = true;
+        function startStars() {
+            if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+            animationFrame = null;
+            drawStars();
         }
 
-        requestAnimationFrame(animateCompass);
-        setTimeout(scheduleSpin, 2400);
-
-        // ── Candle glow flicker ──────────────────────────────────────────────────────
-        const glowOverlay = document.getElementById('glowOverlay');
-
-        function flickerCandle() {
-            const target = 0.42 + Math.random() * 0.58;
-            const duration = 220 + Math.random() * 3200;
-            glowOverlay.style.transition = `opacity ${duration}ms ease-in-out`;
-            glowOverlay.style.opacity = target;
-            setTimeout(flickerCandle, duration + Math.random() * 450);
-        }
-        setTimeout(flickerCandle, 600);
-
-        // ── Particles ────────────────────────────────────────────────────────────────
-        const pcont = document.getElementById('particles');
-        const PCOLS = [
-            'rgba(0,229,200,OP)', 'rgba(232,25,90,OP)',
-            'rgba(91,47,232,OP)', 'rgba(245,168,32,OP)',
-        ];
-
-        for (let i = 0; i < 32; i++) {
-            const el = document.createElement('div');
-            el.className = 'p';
-            const sz = (Math.random() * 2.0 + 0.5).toFixed(2);
-            const cidx = i % PCOLS.length;
-            const op = (Math.random() * 0.13 + 0.04).toFixed(2);
-            const col = PCOLS[cidx].replace('OP', op);
-            const glow = PCOLS[cidx].replace('OP', '0.45');
-            const dur = (Math.random() * 38 + 22).toFixed(1);
-            const dx = ((Math.random() - 0.5) * 110).toFixed(1);
-            const ex = ((Math.random() - 0.5) * 55).toFixed(1);
-            el.style.cssText = `
-        width:${sz}px; height:${sz}px;
-        left:${(Math.random() * 100).toFixed(1)}%;
-        background:${col};
-        box-shadow: 0 0 ${(parseFloat(sz) * 3).toFixed(1)}px ${glow};
-        --dx:${dx}px; --ex:${ex}px; --op:${op};
-        animation-duration:${dur}s;
-        animation-delay:${(-Math.random() * parseFloat(dur)).toFixed(1)}s;
-    `;
-            pcont.appendChild(el);
-        }
+        window.addEventListener('resize', () => {
+            resizeStars();
+            if (reduceMotion.matches) startStars();
+        }, { passive: true });
+        reduceMotion.addEventListener?.('change', startStars);
+        resizeStars();
+        startStars();
     </script>
 </body>
 
