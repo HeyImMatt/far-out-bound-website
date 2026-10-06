@@ -249,23 +249,27 @@
             min-height: 100vh;
             min-height: 100svh;
             margin: 0 auto;
-            padding: clamp(300px, 43vh, 520px) 0 clamp(26px, 4vh, 54px);
+            padding: clamp(70px, calc(100svh - 670px), 390px) 0
+                max(40px, 5svh, env(safe-area-inset-bottom));
             display: grid;
             grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
-            grid-template-areas: "identity player";
+            grid-template-areas:
+                "title title"
+                "identity player";
             align-content: end;
-            align-items: end;
+            align-items: start;
             column-gap: clamp(46px, 7vw, 110px);
             row-gap: clamp(30px, 5vh, 54px);
         }
 
-        .identity {
+        .about-panel {
             grid-area: identity;
             max-width: 520px;
             pointer-events: auto;
         }
 
         .brand-title {
+            grid-area: title;
             position: relative;
             width: max-content;
             max-width: 100%;
@@ -296,7 +300,7 @@
 
         .project-copy {
             max-width: 43ch;
-            margin: clamp(26px, 4vh, 42px) 0 0;
+            margin: 0;
             color: var(--text);
             font-size: clamp(1rem, 1.35vw, 1.18rem);
             line-height: 1.65;
@@ -438,7 +442,7 @@
                     var(--orange) 0,
                     var(--cyan) var(--progress),
                     rgba(231, 240, 240, 0.12) var(--progress),
-                    rgba(231, 240, 240, 0.12) 100%) center / 100% 2px no-repeat;
+                    rgba(231, 240, 240, 0.12) 100%) center / 100% 4px no-repeat;
             cursor: pointer;
         }
 
@@ -504,6 +508,154 @@
             pointer-events: none;
         }
 
+        .signup-panel {
+            grid-area: signup;
+            max-width: 520px;
+            margin-top: 30px;
+            pointer-events: auto;
+        }
+
+        @media (min-width: 761px) {
+            .content {
+                padding-bottom: max(120px, calc(5svh + 80px), env(safe-area-inset-bottom));
+            }
+        }
+
+        .signup-heading {
+            margin: 0 0 16px;
+            color: var(--ivory);
+            font-size: clamp(1rem, 1.35vw, 1.18rem);
+            font-weight: 400;
+        }
+
+        .signup-form {
+            margin: 0;
+        }
+
+        .signup-confirmation {
+            margin: 0;
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        .signup-success-icon {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            vertical-align: -3px;
+            color: var(--cyan);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .signup-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.86rem;
+        }
+
+        .signup-fields {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+        }
+
+        .signup-input,
+        .signup-submit {
+            min-height: 42px;
+            border-radius: 3px;
+            font: inherit;
+        }
+
+        .signup-input {
+            width: 100%;
+            min-width: 0;
+            padding: 10px 12px 8px;
+            border: 1px solid rgba(216, 231, 233, 0.26);
+            background: rgba(2, 7, 11, 0.62);
+            color: #e8eeee;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .signup-input::placeholder {
+            color: var(--dim);
+            opacity: 0.78;
+        }
+
+        .signup-input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(31, 196, 216, 0.11);
+        }
+
+        .signup-submit {
+            padding: 10px 18px 8px;
+            border: 1px solid rgba(255, 122, 26, 0.78);
+            background: rgba(255, 122, 26, 0.10);
+            color: var(--ivory);
+            font-size: 0.86rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+        }
+
+        .signup-submit:hover,
+        .signup-submit:focus-visible {
+            border-color: var(--orange);
+            background: var(--orange);
+            color: var(--void);
+        }
+
+        .signup-submit:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 3px;
+        }
+
+        .form-trap {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        @media (min-width: 800px) {
+            .content {
+                grid-template-areas:
+                    "title title"
+                    "identity player";
+                align-items: start;
+            }
+
+            .brand-title {
+                grid-area: title;
+                display: flex;
+                gap: 0.35em;
+                font-size: clamp(3.5rem, 7vw, 7.2rem);
+                line-height: 1;
+            }
+
+            .brand-title span:last-child {
+                margin-left: 0;
+            }
+
+            .project-copy {
+                grid-area: identity;
+                margin-top: 0;
+                pointer-events: auto;
+            }
+        }
+
         @media (max-width: 760px) {
             .record-stage {
                 top: -158px;
@@ -518,29 +670,51 @@
             .content {
                 width: min(calc(100% - 42px), 560px);
                 min-height: 100svh;
-                padding: 320px 0 24px;
+                padding: 240px 0 max(120px, env(safe-area-inset-bottom));
                 grid-template-columns: 1fr;
                 grid-template-areas:
+                    "title"
+                    "player"
                     "identity"
-                    "player";
+                    "signup";
                 align-content: end;
                 row-gap: 30px;
             }
 
             .brand-title {
+                justify-self: center;
                 font-size: clamp(3.4rem, 17vw, 5.15rem);
                 letter-spacing: 0.11em;
             }
 
+            .brand-title span {
+                margin-inline: auto;
+            }
+
+            .brand-title span:last-child {
+                margin-left: auto;
+            }
+
             .project-copy {
-                max-width: 36ch;
-                margin-top: 28px;
+                grid-area: identity;
+                width: 100%;
+                max-width: none;
+                margin-top: 0;
+                pointer-events: auto;
                 font-size: 1rem;
+            }
+
+            .about-panel {
+                display: contents;
             }
 
             .player-panel {
                 max-width: none;
                 justify-self: stretch;
+            }
+
+            .player-status:empty {
+                display: none;
             }
 
             .track {
@@ -558,6 +732,19 @@
 
             .track-progress {
                 margin-left: 60px;
+            }
+
+            .signup-panel {
+                max-width: none;
+                margin-top: 0;
+            }
+
+            .signup-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-submit {
+                width: 100%;
             }
 
         }
@@ -673,17 +860,10 @@
         </div>
 
         <div class="content">
-            <section class="identity" aria-labelledby="brand-title">
                 <h1 class="brand-title" id="brand-title" aria-label="Far Out Bound">
                     <span data-text="FAR OUT" aria-hidden="true">FAR OUT</span>
                     <span data-text="BOUND" aria-hidden="true">BOUND</span>
                 </h1>
-                <p class="project-copy">Far Out Bound is a solo synthpop indietronica project from Portland,
-                    Oregon-based artist Farbo. The music is built with warm synths, lively grooves, and stacks of
-                    self-harmonized vocals, while the songs drift between themes of disillusionment, exploration, and
-                    reinvention.
-                </p>
-            </section>
 
             <section class="player-panel" aria-labelledby="listen-heading">
                 <h2 class="player-heading" id="listen-heading">Listen</h2>
@@ -739,9 +919,54 @@
                 <p class="player-status" role="status" aria-live="polite">Loading players…</p>
             </section>
 
+            <div class="about-panel">
+                <p class="project-copy">Far Out Bound is a solo synthpop indietronica project from Portland,
+                    Oregon-based artist Farbo. The music is built with warm synths, lively grooves, and stacks of
+                    self-harmonized vocals, while the songs drift between themes of disillusionment, exploration, and
+                    reinvention.
+                </p>
+                <section class="signup-panel" aria-labelledby="signup-heading">
+                    <h2 class="signup-heading" id="signup-heading">Sign up for new music updates</h2>
+                    <form class="signup-form" action="https://bandtools.app/u/faroutbound/subscribers"
+                        accept-charset="UTF-8" method="post" target="signup-response">
+                        <input type="hidden" name="source" value="embedded">
+                        <label class="signup-label" for="email_address">Email address</label>
+                        <div class="signup-fields">
+                            <input class="signup-input" type="email" id="email_address" name="subscriber[email_address]"
+                                autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+                            <button class="signup-submit" type="submit">Subscribe</button>
+                        </div>
+                        <div class="form-trap" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+                    </form>
+                    <iframe name="signup-response" title="Signup submission response" hidden
+                        aria-hidden="true" tabindex="-1"></iframe>
+                    <p class="signup-confirmation" role="status" tabindex="-1" hidden>
+                        Thanks! Please check your email to confirm.
+                        <svg class="signup-success-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m5 12 4 4L19 6" />
+                        </svg>
+                    </p>
+                </section>
+            </div>
+
         </div>
     </main>
 
+    <script>
+        const signupForm = document.querySelector('.signup-form');
+        const signupConfirmation = document.querySelector('.signup-confirmation');
+        signupForm.addEventListener('submit', () => {
+            // Let the browser send the native POST before replacing the form.
+            window.setTimeout(() => {
+                signupForm.hidden = true;
+                signupConfirmation.hidden = false;
+                signupConfirmation.focus();
+            }, 0);
+        });
+    </script>
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script type="module">
         import { createPlayerController } from './js/player-controller.mjs?v=20261003';
@@ -768,7 +993,7 @@
                 }
                 if (activeId) {
                     const title = rows.get(activeId).querySelector('.track-title').textContent;
-                    status.textContent = playing ? `Playing ${title}` : `${title} paused`;
+                    status.textContent = `${playing ? 'Playing' : 'Paused'}: ${title}`;
                 }
                 const recordTitle = activeId
                     ? rows.get(activeId).querySelector('.track-title').textContent
