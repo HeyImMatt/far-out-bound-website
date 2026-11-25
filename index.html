@@ -854,7 +854,7 @@
                 <circle cx="350" cy="350" r="57" fill="none" stroke="#1fc4d8" stroke-opacity=".22" />
                 <circle cx="350" cy="350" r="7" fill="#f3d8ad" stroke="#ff7a1a" stroke-width="3" />
             </svg>
-            <button class="record-control" type="button" aria-label="Play Launch" aria-pressed="false" disabled>
+            <button class="record-control" type="button" aria-label="Play One of These Days" aria-pressed="false" disabled>
                 <span class="record-control-icon" aria-hidden="true"></span>
             </button>
         </div>
@@ -867,29 +867,6 @@
 
             <section class="player-panel" aria-labelledby="listen-heading">
                 <h2 class="player-heading" id="listen-heading">Listen</h2>
-
-                <article class="track" data-track-id="launch">
-                    <div class="track-main">
-                        <button class="track-button" type="button" aria-label="Play Launch" aria-pressed="false"
-                            disabled>
-                            <span class="track-icon" aria-hidden="true"></span>
-                        </button>
-                        <a class="track-title" href="https://soundcloud.com/far-out-bound/launch">Launch</a>
-                        <a class="track-source" href="https://soundcloud.com/far-out-bound/launch" target="_blank"
-                            rel="noopener noreferrer" aria-label="Open Launch on SoundCloud in a new tab">
-                            <svg class="soundcloud-icon" viewBox="0 0 24 16" aria-hidden="true">
-                                <path
-                                    d="M1 10h1v4H1zm2-3h1v7H3zm2-2h1v9H5zm2-1h1v10H7zm2 2h1v8H9zm2-1.2A5.3 5.3 0 0 1 21.4 7 3.5 3.5 0 0 1 21 14H11Z" />
-                            </svg>
-                            <span>SoundCloud</span>
-                        </a>
-                    </div>
-                    <input class="track-progress" type="range" min="0" max="1000" value="0" aria-label="Seek Launch"
-                        aria-valuetext="0%" disabled>
-                    <iframe class="soundcloud-widget" id="widget-launch" title="SoundCloud player for Launch"
-                        tabindex="-1" aria-hidden="true" allow="autoplay"
-                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/far-out-bound/launch&amp;color=%23ff7a1a&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"></iframe>
-                </article>
 
                 <article class="track" data-track-id="days">
                     <div class="track-main">
@@ -914,6 +891,29 @@
                     <iframe class="soundcloud-widget" id="widget-days" title="SoundCloud player for One of These Days"
                         tabindex="-1" aria-hidden="true" allow="autoplay"
                         src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/far-out-bound/one-of-these-days&amp;color=%23ff7a1a&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"></iframe>
+                </article>
+
+                <article class="track" data-track-id="launch">
+                    <div class="track-main">
+                        <button class="track-button" type="button" aria-label="Play Launch" aria-pressed="false"
+                            disabled>
+                            <span class="track-icon" aria-hidden="true"></span>
+                        </button>
+                        <a class="track-title" href="https://soundcloud.com/far-out-bound/launch">Launch</a>
+                        <a class="track-source" href="https://soundcloud.com/far-out-bound/launch" target="_blank"
+                            rel="noopener noreferrer" aria-label="Open Launch on SoundCloud in a new tab">
+                            <svg class="soundcloud-icon" viewBox="0 0 24 16" aria-hidden="true">
+                                <path
+                                    d="M1 10h1v4H1zm2-3h1v7H3zm2-2h1v9H5zm2-1h1v10H7zm2 2h1v8H9zm2-1.2A5.3 5.3 0 0 1 21.4 7 3.5 3.5 0 0 1 21 14H11Z" />
+                            </svg>
+                            <span>SoundCloud</span>
+                        </a>
+                    </div>
+                    <input class="track-progress" type="range" min="0" max="1000" value="0" aria-label="Seek Launch"
+                        aria-valuetext="0%" disabled>
+                    <iframe class="soundcloud-widget" id="widget-launch" title="SoundCloud player for Launch"
+                        tabindex="-1" aria-hidden="true" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/far-out-bound/launch&amp;color=%23ff7a1a&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"></iframe>
                 </article>
 
                 <p class="player-status" role="status" aria-live="polite">Loading players…</p>
@@ -971,7 +971,7 @@
     <script type="module">
         import { createPlayerController } from './js/player-controller.mjs?v=20261003';
 
-        const trackIds = ['launch', 'days'];
+        const trackIds = ['days', 'launch'];
         const rows = new Map(trackIds.map(id => [id, document.querySelector(`[data-track-id="${id}"]`)]));
         const status = document.querySelector('.player-status');
         const recordButton = document.querySelector('.record-control');
@@ -997,7 +997,7 @@
                 }
                 const recordTitle = activeId
                     ? rows.get(activeId).querySelector('.track-title').textContent
-                    : 'Launch';
+                    : 'One of These Days';
                 recordButton.setAttribute('aria-pressed', String(playing));
                 recordButton.setAttribute('aria-label', `${playing ? 'Pause' : 'Play'} ${recordTitle}`);
             },
@@ -1016,7 +1016,7 @@
             },
         });
 
-        recordButton.addEventListener('click', () => controller.toggleCurrentOr('launch'));
+        recordButton.addEventListener('click', () => controller.toggleCurrentOr('days'));
 
         for (const [id, row] of rows) {
             const button = row.querySelector('.track-button');
@@ -1035,7 +1035,7 @@
                 controller.register(id, widget);
                 button.disabled = false;
                 progress.disabled = false;
-                if (id === 'launch') recordButton.disabled = false;
+                if (id === 'days') recordButton.disabled = false;
             });
             widget.bind(window.SC.Widget.Events.PLAY, () => controller.handlePlay(id));
             widget.bind(window.SC.Widget.Events.PAUSE, () => controller.handlePause(id));
